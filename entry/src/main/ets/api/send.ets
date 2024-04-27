@@ -25,7 +25,7 @@ export class Send{
    * @param extraData
    * @returns
    */
-  public static async get(url: string,extraData: Object | null = null): Promise<string | Object | ArrayBuffer | null>{
+  public static async get(url: string,extraData: Object | null = null): Promise<http.HttpResponse>{
     return await Send.send(url,http.RequestMethod.GET,extraData)
   }
   /**
@@ -34,7 +34,7 @@ export class Send{
    * @param extraData
    * @returns
    */
-  public static async post(url: string,extraData: Object | null = null): Promise<string | Object | ArrayBuffer | null>{
+  public static async post(url: string,extraData: Object | null = null): Promise<http.HttpResponse>{
     return await Send.send(url,http.RequestMethod.POST,extraData)
   }
 

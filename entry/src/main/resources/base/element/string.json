@@ -11,6 +11,26 @@
     {
       "name": "EntryAbility_label",
       "value": "label"
+    },
+    {
+      "name": "home",
+      "value": "首页"
+    },
+    {
+      "name": "dawdling",
+      "value": "摸鱼"
+    },
+    {
+      "name": "article",
+      "value": "文章"
+    },
+    {
+      "name": "question",
+      "value": "问答"
+    },
+    {
+      "name": "user",
+      "value": "用户"
     }
   ]
 }

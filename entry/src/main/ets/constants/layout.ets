@@ -1,0 +1,1 @@
+export const FULL_PERCENT = "100%"

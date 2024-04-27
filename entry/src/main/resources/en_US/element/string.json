@@ -11,6 +11,26 @@
     {
       "name": "EntryAbility_label",
       "value": "label"
+    },
+    {
+      "name": "home",
+      "value": "Home"
+    },
+    {
+      "name": "dawdling",
+      "value": "Dawdling"
+    },
+    {
+      "name": "article",
+      "value": "Article"
+    },
+    {
+      "name": "question",
+      "value": "Q&A"
+    },
+    {
+      "name": "user",
+      "value": "User"
     }
   ]
 }

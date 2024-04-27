@@ -3,6 +3,14 @@
     {
       "name": "start_window_background",
       "value": "#FFFFFF"
+    },
+    {
+      "name": "not_selected_background_for_component",
+      "value": "#4D000000"
+    },
+    {
+      "name": "selected_background_for_component",
+      "value": "#0A59F7"
     }
   ]
 }
