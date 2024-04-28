@@ -1,6 +1,9 @@
-import { Send } from './send'
+/**
+ * 用户相关内容
+ */
+import { Send } from '../send'
 import { http } from '@kit.NetworkKit'
-import { Captcha } from '.'
+import { Captcha } from './model'
 
 /**
  * 获取图灵码

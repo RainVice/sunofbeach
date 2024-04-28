@@ -11,6 +11,10 @@
     {
       "name": "selected_background_for_component",
       "value": "#0A59F7"
+    },
+    {
+      "name": "background_color",
+      "value": "#80ffffff"
     }
   ]
 }

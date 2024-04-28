@@ -14,7 +14,7 @@ export class Send{
   private static async send(url: string, method: http.RequestMethod,extraData: Object | null): Promise<http.HttpResponse>{
     const conf: http.HttpRequestOptions = extraData ? {
       method,
-      extraData,
+      extraData
     } : {method}
     const connect = http.createHttp()
     return await connect.request(Send.base_url + url,conf)
