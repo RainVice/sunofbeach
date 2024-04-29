@@ -15,7 +15,6 @@ export struct Article {
     Column() {
 
       Tabs({ index: $$this.currentIndex }) {
-
         ForEach(this.category, (item: ct.Category, index: number) => {
           TabContent() {
             List(){
@@ -32,9 +31,7 @@ export struct Article {
           .tabBar(this.tabBar(item.categoryName, index))
         })
       }
-      .barMode(BarMode.Scrollable,{
-        margin: 10
-      })
+      .barMode(BarMode.Scrollable,{ margin: 10 })
       .barHeight(35)
       .barOverlap(true)
       .barBackgroundBlurStyle(BlurStyle.Thin)
@@ -49,6 +46,7 @@ export struct Article {
     Column({ space: 2 }) {
       Text(name)
         .fontSize(14)
+        .fontWeight(FontWeight.Bold)
         .fontColor(this.currentIndex === index ?
         $r('app.color.selected_background_for_component') :
         $r('app.color.not_selected_background_for_component'))

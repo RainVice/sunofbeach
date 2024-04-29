@@ -1,4 +1,6 @@
-
+/**
+ * 引导页数据
+ */
 export interface IndexItem {
   title: ResourceStr
   icon: ResourceStr
@@ -47,3 +49,13 @@ export const indexItems: IndexItem[] = [
     ]
   },
 ]
+
+/**
+ * 引导页头部数据
+ */
+export interface IndexHeader{
+  image: ResourceStr
+  action: () => void
+  description?: ResourceStr
+}
+

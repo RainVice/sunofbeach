@@ -5,6 +5,8 @@
   "main": "",
   "author": "",
   "license": "",
-  "dependencies": {}
+  "dependencies": {
+    "@ohasasugar/hp-richtext": "^1.0.3"
+  }
 }
 

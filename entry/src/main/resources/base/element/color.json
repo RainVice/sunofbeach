@@ -15,6 +15,38 @@
     {
       "name": "background_color",
       "value": "#80ffffff"
+    },
+    {
+      "name": "hyper_link",
+      "value": "#317AF7"
+    },
+    {
+      "name": "hyper_link_back",
+      "value": "#33317AF7"
+    },
+    {
+      "name": "first_text",
+      "value": "#E5000000"
+    },
+    {
+      "name": "second_text",
+      "value": "#99000000"
+    },
+    {
+      "name": "third_text",
+      "value": "#66000000"
+    },
+    {
+      "name": "vip",
+      "value": "#FEBD17"
+    },
+    {
+      "name": "divider",
+      "value": "#33000000"
+    },
+    {
+      "name": "list_back",
+      "value": "#0d000000"
     }
   ]
 }

@@ -3,8 +3,8 @@
  */
 import { Send } from '../send'
 import { http } from '@kit.NetworkKit'
-import { Category, Recommend } from './model'
-import { SunData } from '..'
+import { Category, CtContent } from './model'
+import { ListInfo, SunData } from '..'
 import { resToObj } from '../util'
 
 /**
@@ -20,8 +20,8 @@ export const category = async (): Promise<Category[]> => {
  * 获取推荐内容
  * @param page 页码，从1开始
  */
-export const recommend_content = async (page: number = 1): Promise<Recommend> => {
+export const recommend_content = async (page: number = 1): Promise<ListInfo<CtContent>> => {
   const res: http.HttpResponse = await Send.get(`/ct/content/home/recommend/${page}`)
-  let recommend: Recommend = resToObj<SunData<Recommend>>(res).data
-  return recommend as Recommend
+  let recommend: ListInfo<CtContent> = resToObj<SunData<ListInfo<CtContent>>>(res).data
+  return recommend
 }

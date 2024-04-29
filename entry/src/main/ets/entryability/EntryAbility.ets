@@ -1,5 +1,4 @@
 import { AbilityConstant, UIAbility, Want } from '@kit.AbilityKit';
-import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
 
 export default class EntryAbility extends UIAbility {
@@ -9,8 +8,8 @@ export default class EntryAbility extends UIAbility {
   onDestroy(): void {
   }
 
-  onWindowStageCreate(windowStage: window.WindowStage): void {
-    windowStage.loadContent('pages/Index/Index');
+  async onWindowStageCreate(windowStage: window.WindowStage): Promise<void> {
+    await windowStage.loadContent('pages/Index/Index');
   }
 
   onWindowStageDestroy(): void {

@@ -15,7 +15,7 @@ export interface Category {
 /**
  * 首页推荐内容,根据分类获取内容
  */
-export interface Content {
+export interface CtContent {
   covers: string[];
   title: string;
   createTime: string;
@@ -28,15 +28,6 @@ export interface Content {
   userId: string;
   isVip?: boolean;
   vip?: boolean
-}
-export interface Recommend {
-  list: Content[];
-  total: number;
-  pageSize: number;
-  currentPage: number;
-  hasNext: boolean;
-  hasPre: boolean;
-  totalPage: number;
 }
 
 
