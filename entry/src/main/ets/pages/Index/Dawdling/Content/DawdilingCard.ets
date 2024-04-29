@@ -21,6 +21,7 @@ export struct DawdlingCard {
   }
 
   build() {
+    // todo 点击进入详情页
     Column({ space: 10 }) {
       Row({ space: 10 }) {
         Image(this.moyuContent?.avatar).width(30).height(30).borderRadius(100)
@@ -43,10 +44,12 @@ export struct DawdlingCard {
         .height(30)
         .alignItems(HorizontalAlign.Start)
         .justifyContent(FlexAlign.Center)
-      }.justifyContent(FlexAlign.Start)
+      }
+      .justifyContent(FlexAlign.Start)
       .width(FULL_PERCENT)
 
-      HPRichText({ richTextOption: $richTextOption }).width(FULL_PERCENT)
+      HPRichText({ richTextOption: $richTextOption })
+        .width(FULL_PERCENT)
       Flex() {
         ForEach(this.moyuContent?.images, (item: string, index: number) => {
           Image(item).height(100).width(100).margin({ right: 10 })
@@ -137,6 +140,5 @@ export struct DawdlingCard {
     .backgroundColor(Color.White)
     .padding(10)
     .borderRadius(5)
-
   }
 }
