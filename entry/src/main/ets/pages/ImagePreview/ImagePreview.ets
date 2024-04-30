@@ -9,6 +9,7 @@ struct ImagePreview {
   @State urls: string[] | undefined = (router.getParams() as RouterParams).imageUrls
 
 
+  // todo 图片预览
   build() {
     Column() {
       if (this.urls) {
