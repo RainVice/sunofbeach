@@ -1,6 +1,8 @@
 import { HPRichText, RichTextOption } from '@ohasasugar/hp-richtext'
 import { moyu } from '../../../../api'
 import { FULL_PERCENT } from '../../../../constants'
+import { router } from '@kit.ArkUI'
+import { RouterParams } from '../../../../view_model'
 
 @Component
 @Preview
@@ -50,9 +52,16 @@ export struct DawdlingCard {
 
       HPRichText({ richTextOption: $richTextOption })
         .width(FULL_PERCENT)
-      Flex() {
+      Flex({ wrap: FlexWrap.Wrap }) {
         ForEach(this.moyuContent?.images, (item: string, index: number) => {
           Image(item).height(100).width(100).margin({ right: 10 })
+            .onClick(() => {
+              router.pushUrl({
+                url: 'pages/ImagePreview/ImagePreview',
+                params: { imageUrls: this.moyuContent?.images }
+              })
+            })
+            .autoResize(true)
         })
       }
 
@@ -68,12 +77,17 @@ export struct DawdlingCard {
             if (this.moyuContent.linkTitle) {
               Text(this.moyuContent.linkTitle)
                 .fontSize(14)
+                .textOverflow({
+                  overflow: TextOverflow.Ellipsis
+                })
+                .maxLines(1)
             }
             Text(this.moyuContent.linkUrl).fontSize(12)
               .fontColor($r('app.color.hyper_link'))
               .textOverflow({
                 overflow: TextOverflow.Ellipsis
               })
+              .maxLines(1)
           }
           .alignItems(HorizontalAlign.Start)
 
@@ -86,7 +100,8 @@ export struct DawdlingCard {
         })
         .borderRadius(5)
         .height(70)
-        .width(FULL_PERCENT)
+        .width("95%")
+        .alignSelf(ItemAlign.Center)
       }
       if (this.moyuContent?.topicName) {
         Text(this.moyuContent.topicName)

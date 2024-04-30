@@ -47,6 +47,10 @@
     {
       "name": "list_back",
       "value": "#0d000000"
+    },
+    {
+      "name": "fourth_level_opacity",
+      "value": "#33000000"
     }
   ]
 }

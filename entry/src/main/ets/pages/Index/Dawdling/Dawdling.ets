@@ -70,7 +70,6 @@ export struct Dawdling {
     }
     .height(FULL_PERCENT)
     .width(FULL_PERCENT)
-
   }
 
 
