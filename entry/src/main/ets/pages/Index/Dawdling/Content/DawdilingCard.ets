@@ -1,7 +1,7 @@
 import { HPRichText, RichTextOption } from '@ohasasugar/hp-richtext'
 import { moyu } from '../../../../api'
 import { FULL_PERCENT } from '../../../../constants'
-import { router } from '@kit.ArkUI'
+import { router, window } from '@kit.ArkUI'
 import { RouterParams } from '../../../../view_model'
 
 @Component
@@ -54,11 +54,19 @@ export struct DawdlingCard {
         .width(FULL_PERCENT)
       Flex({ wrap: FlexWrap.Wrap }) {
         ForEach(this.moyuContent?.images, (item: string, index: number) => {
-          Image(item).height(100).width(100).margin({ right: 10 })
+          Image(item)
+            .sharedTransition(item)
+            .height(100)
+            .width(100)
+            .margin({ right: 10 })
             .onClick(() => {
               router.pushUrl({
                 url: 'pages/ImagePreview/ImagePreview',
-                params: { imageUrls: this.moyuContent?.images }
+                params: {
+                  imageUrls: this.moyuContent?.images,
+                  imageIndex: index,
+                  shareID: item
+                }
               })
             })
             .autoResize(true)

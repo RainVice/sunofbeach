@@ -6,7 +6,8 @@
   "author": "",
   "license": "",
   "dependencies": {
-    "@ohasasugar/hp-richtext": "^1.0.3"
+    "@ohasasugar/hp-richtext": "^1.0.4",
+    "@rv/image-preview": "^1.0.1"
   },
   "devDependencies": {},
   "dynamicDependencies": {}
