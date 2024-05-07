@@ -8,7 +8,7 @@ export interface DawdilingDetailData {
   content: string
 }
 
-// todo 完善详情页
+// todo 完善评论
 @Component
 export struct DawdilingDetail {
   @State moyuContent: moyu.MoyuContent | undefined = undefined
@@ -60,8 +60,15 @@ export struct DawdilingDetail {
             Column({ space: 10 }) {
               DawsilingContent({ moyuContent: this.moyuContent, content: this.content })
               Divider()
+              // 评论
+              Column(){
+
+              }
+                .height(FULL_PERCENT)
+                .width(FULL_PERCENT)
+
             }
-          }
+          }.layoutWeight(1)
         }
         .padding(10)
       }
