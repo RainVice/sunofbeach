@@ -9,20 +9,17 @@ import { RouterParams } from '../../view_model'
 struct ImagePreview {
   params: RouterParams = router.getParams() as RouterParams
   @State urls: string[] | undefined = this.params.imageUrls
-  // @State shareID: string | undefined = this.params.shareID
   @State imagePreViewOption: ImagePreViewOption = new ImagePreViewOption(this.urls as string[])
 
   async aboutToAppear(): Promise<void> {
     enableFullScreen()
     this.imagePreViewOption.setShowIndex(this.params.imageIndex)
-    // this.imagePreViewOption.setId(this.shareID)
   }
 
   async aboutToDisappear(): Promise<void> {
     disableFullScreen()
   }
 
-  // todo 修改图片预览bug
   build() {
     Column() {
       if (this.urls) {

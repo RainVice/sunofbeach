@@ -1,7 +1,8 @@
-import { FULL_PERCENT } from '../../constants'
+import { Dawdiling, FULL_PERCENT } from '../../constants'
 import { IndexItem, indexItems } from '../../view_model'
 import { Article } from './Article/Article'
 import { Header } from './component/Header'
+import { DawdilingDetail } from './Dawdling/Content/DawdilingDetail'
 import { Dawdling } from './Dawdling/Dawdling'
 import { Question } from './Question/Question'
 import { User } from './User/User'
@@ -10,21 +11,34 @@ import { User } from './User/User'
 @Component
 struct Index {
   @State toolBarIndex: number = 0
+  @Provide navPathStack: NavPathStack = new NavPathStack()
 
   build() {
     Column() {
-      Navigation() {
+      Navigation(this.navPathStack) {
         Tabs({ barPosition: BarPosition.End, index: $$this.toolBarIndex }) {
           ForEach(indexItems, (item: IndexItem, index: number) => {
             TabContent() {
               Scroll() {
                 Column() {
+                  // 首页摸鱼
                   if (index === 0) {
-                    Header({menuItem: [
-                      {image: $r('app.media.ic_public_community_messages'),action: () => {},description: "消息"},
-                      {image: $r('app.media.ic_public_add_filled'),action: () => {},description: "添加文章"},
-                      {image: $r('app.media.ic_public_view_grid'),action: () => {},description: "更多话题"},
-                    ]})
+                    Header({
+                      menuItem: [
+                        {
+                          image: $r('app.media.ic_public_community_messages'), action: () => {
+                        }, description: "消息"
+                        },
+                        {
+                          image: $r('app.media.ic_public_add_filled'), action: () => {
+                        }, description: "添加文章"
+                        },
+                        {
+                          image: $r('app.media.ic_public_view_grid'), action: () => {
+                        }, description: "更多话题"
+                        },
+                      ]
+                    })
                     Dawdling()
                   }
                   else if (index === 1) {
@@ -53,11 +67,18 @@ struct Index {
       .width(FULL_PERCENT)
       .height(FULL_PERCENT)
       .hideTitleBar(true)
+      .navDestination(this.PageMap)
     }
     .width(FULL_PERCENT)
     .height(FULL_PERCENT)
   }
 
+  @Builder
+  PageMap(name: string){
+    if (name === Dawdiling){
+      DawdilingDetail()
+    }
+  }
 
   @Builder
   toolBar(index: number) {

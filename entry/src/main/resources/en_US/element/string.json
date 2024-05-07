@@ -31,6 +31,10 @@
     {
       "name": "user",
       "value": "User"
+    },
+    {
+      "name": "follow",
+      "value": "follow"
     }
   ]
 }

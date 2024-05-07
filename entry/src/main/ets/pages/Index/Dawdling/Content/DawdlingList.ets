@@ -4,7 +4,7 @@ import { ListAdapter } from '../../../../utils'
 import { DawdlingCard } from './DawdilingCard'
 
 @Component
-export struct DawdlingContent {
+export struct DawdlingList {
   @Prop topicInfo: moyu.TopicIndex
   @State hasNext: boolean = true
   @State adapter: ListAdapter<moyu.MoyuContent> | null = null

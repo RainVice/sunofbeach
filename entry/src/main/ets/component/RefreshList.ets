@@ -3,7 +3,6 @@ import { SwipeRefresher } from '@ohos.arkui.advanced.SwipeRefresher'
 import { ListAdapter } from '../utils'
 
 @Component
-@Preview
 export struct RefreshList {
   topDistance: number = 0
   bottomDistance: number = 0

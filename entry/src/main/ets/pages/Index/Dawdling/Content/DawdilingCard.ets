@@ -1,27 +1,25 @@
 import { moyu } from '../../../../api'
-import { FULL_PERCENT } from '../../../../constants'
-import { router } from '@kit.ArkUI'
+import { Dawdiling, FULL_PERCENT } from '../../../../constants'
 import { createDocumentStream, Document, DomUtils } from '@ohos/htmlparser2'
+import { DawsilingContent } from './DawdilingContent'
+import { DawdilingDetailData } from './DawdilingDetail'
 
 @Component
-@Preview
 export struct DawdlingCard {
-  @Prop moyuContent: moyu.MoyuContent | null = null
-  @State showMore: boolean = false;
-  @State textHeight: number = 199
-  @State text: string = ''
+  @Prop moyuContent: moyu.MoyuContent
+  @State content: string = ''
+  @Consume navPathStack: NavPathStack
 
   aboutToAppear(): void {
     const parser = createDocumentStream((error: Error | null, dom: Document) => {
-      this.text = DomUtils.textContent(dom)
+      this.content = DomUtils.textContent(dom)
     })
     parser.write(this.moyuContent?.content as string)
     parser.end()
   }
 
   build() {
-    NavRouter() {
-      // todo 点击进入详情页
+    if (this.moyuContent) {
       Column({ space: 10 }) {
         // 头像
         Row({ space: 10 }) {
@@ -49,83 +47,8 @@ export struct DawdlingCard {
         .justifyContent(FlexAlign.Start)
         .width(FULL_PERCENT)
 
-        if (this.text){
-          Text(this.text)
-            .maxLines(3)
-            .fontSize(14)
-            .textOverflow({overflow: TextOverflow.Ellipsis})
+        DawsilingContent({ moyuContent: this.moyuContent, content: this.content, maxLine: 3 })
 
-        }
-        // 图片列表
-        Flex({ wrap: FlexWrap.Wrap }) {
-          ForEach(this.moyuContent?.images, (item: string, index: number) => {
-            Image(item)
-              .sharedTransition(JSON.stringify(item) + index)
-              .height(100)
-              .width(100)
-              .margin({ right: 5, bottom: 5 })
-              .onClick(() => {
-                router.pushUrl({
-                  url: 'pages/ImagePreview/ImagePreview',
-                  params: {
-                    imageUrls: this.moyuContent?.images,
-                    imageIndex: index,
-                  }
-                })
-              })
-              .autoResize(true)
-          })
-        }
-
-        if (this.moyuContent?.linkUrl) {
-          Row({ space: 5 }) {
-
-            if (this.moyuContent?.linkCover) {
-              Image(this.moyuContent?.linkCover)
-                .width(70)
-                .height(70)
-            }
-            Column({ space: 5 }) {
-              if (this.moyuContent.linkTitle) {
-                Text(this.moyuContent.linkTitle)
-                  .fontSize(14)
-                  .textOverflow({
-                    overflow: TextOverflow.Ellipsis
-                  })
-                  .maxLines(1)
-              }
-              Text(this.moyuContent.linkUrl).fontSize(12)
-                .fontColor($r('app.color.hyper_link'))
-                .textOverflow({
-                  overflow: TextOverflow.Ellipsis
-                })
-                .maxLines(1)
-            }
-            .alignItems(HorizontalAlign.Start)
-
-          }
-          .justifyContent(FlexAlign.Start)
-          .padding(10)
-          .border({
-            width: 0.5,
-            color: $r('app.color.divider')
-          })
-          .borderRadius(5)
-          .height(70)
-          .width("95%")
-          .alignSelf(ItemAlign.Center)
-        }
-        if (this.moyuContent?.topicName) {
-          Text(this.moyuContent.topicName)
-            .padding({
-              top: 5, bottom: 5,
-              right: 10, left: 10
-            })
-            .fontSize(10)
-            .fontColor($r('app.color.hyper_link'))
-            .backgroundColor($r('app.color.hyper_link_back'))
-            .borderRadius(5)
-        }
 
         Divider()
 
@@ -167,10 +90,12 @@ export struct DawdlingCard {
       .backgroundColor(Color.White)
       .padding(10)
       .borderRadius(5)
-
-      NavDestination() {
-        Text("11111")
-      }
+      .onClick(() => {
+        this.navPathStack.replacePath({
+          name: Dawdiling,
+          param: { moyuContent: this.moyuContent, content: this.content } as DawdilingDetailData
+        })
+      })
 
     }
   }

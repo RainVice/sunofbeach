@@ -31,6 +31,10 @@
     {
       "name": "user",
       "value": "用户"
+    },
+    {
+      "name": "follow",
+      "value": "关注"
     }
   ]
 }

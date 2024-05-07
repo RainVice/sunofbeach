@@ -51,6 +51,10 @@
     {
       "name": "fourth_level_opacity",
       "value": "#33000000"
+    },
+    {
+      "name": "auxiliary",
+      "value": "#49BD38"
     }
   ]
 }

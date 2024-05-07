@@ -6,7 +6,7 @@
   "author": "",
   "license": "",
   "dependencies": {
-    "@rv/image-preview": "^1.0.1",
+    "@rv/image-preview": "^1.0.2",
     "@ohos/htmlparser2": "^1.0.0"
   },
   "devDependencies": {},
