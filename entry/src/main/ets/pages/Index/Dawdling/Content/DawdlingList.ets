@@ -1,5 +1,5 @@
 import { ListInfo, moyu } from '../../../../api'
-import { RefreshList } from '../../../../component/RefreshList'
+import { RefreshList } from '../../../../component'
 import { ListAdapter } from '../../../../utils'
 import { DawdlingCard } from './DawdilingCard'
 
@@ -40,9 +40,12 @@ export struct DawdlingList {
     if (this.adapter) {
       RefreshList({
         listAdapter: $adapter,
+        bgColor: $r('app.color.list_back'),
         hasNext: this.hasNext,
         topDistance: 35,
         bottomDistance: 56,
+        leftDistance: 10,
+        rightDistance: 10,
         itemView: this.listItem,
         refresh: async () => {
           await this.refresh()
@@ -55,7 +58,7 @@ export struct DawdlingList {
   }
 
   @Builder
-  listItem(item: object, index: number) {
+  listItem(item: object | string | number | boolean, index: number) {
     DawdlingCard({ moyuContent: item as moyu.MoyuContent })
   }
 }

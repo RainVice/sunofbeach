@@ -1,21 +1,21 @@
-import { ct } from '../../../api'
+import { content } from '../../../api'
 import { FULL_PERCENT } from '../../../constants'
 
 @Component
 export struct Article {
   @State currentIndex: number = 0
-  @State category: ct.Category[] = []
+  @State category: content.Category[] = []
 
   async aboutToAppear(): Promise<void> {
-    this.category = await ct.category()
-    this.category.unshift(ct.recommend)
+    this.category = await content.category()
+    this.category.unshift(content.recommend)
   }
 
   build() {
     Column() {
 
       Tabs({ index: $$this.currentIndex }) {
-        ForEach(this.category, (item: ct.Category, index: number) => {
+        ForEach(this.category, (item: content.Category, index: number) => {
           TabContent() {
             List(){
               ListItem().height(35)

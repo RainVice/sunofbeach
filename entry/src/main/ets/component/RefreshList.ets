@@ -6,10 +6,18 @@ import { ListAdapter } from '../utils'
 export struct RefreshList {
   topDistance: number = 0
   bottomDistance: number = 0
+  leftDistance: number = 0
+  rightDistance: number = 0
+  bgColor: ResourceColor | undefined = undefined
   space: number = 10
+  nestedScrollOptions: NestedScrollOptions = {
+    scrollForward: NestedScrollMode.PARENT_FIRST,
+    scrollBackward: NestedScrollMode.PARENT_FIRST
+  }
+  needRefresh: boolean = true
   @Prop hasNext: boolean
-  @Link listAdapter: ListAdapter<object>
-  @BuilderParam itemView: (item: object, index: number) => void
+  @Link listAdapter: ListAdapter<object | string | number | boolean>
+  @BuilderParam itemView: (item: object | string | number | boolean, index: number) => void
   /**
    * 刷新事件
    */
@@ -26,81 +34,80 @@ export struct RefreshList {
 
   build() {
     if (this.listAdapter) {
-      Refresh({ refreshing: $$this.isRefreshing }) {
-        List({ space: this.space, scroller: this.listScroller }) {
-          ListItem()
-          // ListItem().height(this.topDistance)
-          // if (this.isRefreshing) {
-          //   ListItem() {
-          //     SwipeRefresher({
-          //       content: "刷新中",
-          //       isLoading: true
-          //     })
-          //   }
-          // }
-          LazyForEach(this.listAdapter, (item: object, index: number) => {
-            ListItem() {
-              this.itemView(item, index)
-            }
-          })
-          if (this.isLoading && this.hasNext) {
-            ListItem() {
-              SwipeRefresher({
-                content: "加载中",
-                isLoading: true
-              })
-            }
-          }
-          if (!this.hasNext) {
-            ListItem(){
-              Row(){
-                Text("没有更多了")
-                  .fontSize(12)
-                  .fontColor($r('app.color.third_text'))
-              }.width(FULL_PERCENT)
-              .justifyContent(FlexAlign.Center)
-
-            }
-          }
-          ListItem().height(this.bottomDistance)
+      if (this.needRefresh) {
+        Refresh({ refreshing: $$this.isRefreshing }) {
+          this.list()
         }
-        .padding({
-          left: 10,
-          right: 10
+        .backgroundColor(this.bgColor)
+        .onRefreshing(async () => {
+          await this.refresh()
+          this.isRefreshing = false
         })
-        .scrollBar(BarState.Off)
-        .nestedScroll({
-          scrollForward: NestedScrollMode.PARENT_FIRST,
-          scrollBackward: NestedScrollMode.PARENT_FIRST
-        })
-        // .height(FULL_PERCENT)
+        .padding({ top: this.topDistance })
         .width(FULL_PERCENT)
-        // .onReachStart(async () => {
-        //   if (this.isLoading || this.isRefreshing) {
-        //     return
-        //   }
-        //   this.isRefreshing = true
-        //   await this.refresh()
-        //   this.isRefreshing = false
-        // })
-        .onReachEnd(async () => {
-          if (this.isLoading || this.isRefreshing) {
-            return
-          }
-          this.isLoading = true
-          await this.loading()
-          this.isLoading = false
-        })
+        .height(FULL_PERCENT)
+      }else{
+        this.list()
       }
-      .backgroundColor($r('app.color.list_back'))
-      .onRefreshing(async () => {
-        await this.refresh()
-        this.isRefreshing = false
-      })
-      .padding({top: this.topDistance})
-      .width(FULL_PERCENT)
-      .height(FULL_PERCENT)
+
 
     }
+  }
+
+  @Builder
+  list(){
+    List({ space: this.space, scroller: this.listScroller }) {
+      ListItem()
+      // ListItem().height(this.topDistance)
+      // if (this.isRefreshing) {
+      //   ListItem() {
+      //     SwipeRefresher({
+      //       content: "刷新中",
+      //       isLoading: true
+      //     })
+      //   }
+      // }
+      LazyForEach(this.listAdapter, (item: object, index: number) => {
+        ListItem() {
+          this.itemView(item, index)
+        }
+      })
+      if (this.isLoading && this.hasNext) {
+        ListItem() {
+          SwipeRefresher({
+            content: "加载中",
+            isLoading: true
+          })
+        }
+      }
+      if (!this.hasNext) {
+        ListItem() {
+          Row() {
+            Text("没有更多了")
+              .fontSize(12)
+              .fontColor($r('app.color.third_text'))
+          }.width(FULL_PERCENT)
+          .justifyContent(FlexAlign.Center)
+
+        }
+      }
+      ListItem().height(this.bottomDistance)
+    }
+    .padding({
+      left: this.leftDistance,
+      right: this.rightDistance
+    })
+    .height(FULL_PERCENT)
+    .scrollBar(BarState.Off)
+    .nestedScroll(this.nestedScrollOptions)
+    .width(FULL_PERCENT)
+    .onReachEnd(async () => {
+      if (this.isLoading || this.isRefreshing) {
+        return
+      }
+      this.isLoading = true
+      await this.loading()
+      this.isLoading = false
+    })
   }
 }

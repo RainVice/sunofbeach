@@ -43,3 +43,39 @@ export interface MoyuContent {
   thumbUpList: string[];
   vip: boolean;
 }
+
+
+/**
+ * 摸鱼评论内容
+ */
+export interface SubComment {
+  id: string;
+  userId: string;
+  avatar: string;
+  position: string;
+  company: string;
+  nickname: string;
+  targetUserId: string;
+  targetUserNickname: string;
+  targetUserIsVip: boolean;
+  createTime: string;
+  content: string;
+  thumbUpList: string[];
+  commentId: string;
+  vip: boolean;
+}
+export interface MoyuComment {
+  id: string;
+  userId: string;
+  company?: string;
+  position?: string;
+  avatar: string;
+  nickname: string;
+  createTime: string;
+  content: string;
+  thumbUpList: string[];
+  thumbUp: number;
+  momentId: string;
+  subComments: SubComment[];
+  vip: boolean;
+}

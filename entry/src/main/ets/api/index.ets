@@ -1,6 +1,6 @@
 export * as user from './user'
 
-export * as ct from './ct'
+export * as content from './content'
 
 export * as moyu from './moyu'
 
