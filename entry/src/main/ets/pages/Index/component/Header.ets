@@ -1,9 +1,8 @@
-import { IndexHeader, IndexItem } from '../../../view_model'
+import { IndexHeader } from '../../../view_model'
 import { promptAction } from '@kit.ArkUI'
 
 @Component
 export struct Header {
-
   @Prop menuItem: IndexHeader[] = []
 
   build() {
@@ -14,7 +13,7 @@ export struct Header {
         .height(30)
         .backgroundColor(Color.Black)
       Search({
-        placeholder: "输入搜索内容"
+        placeholder: $r('app.string.enter_search_content')
       })
         .placeholderFont({
           size: 12
@@ -23,7 +22,7 @@ export struct Header {
         .layoutWeight(1)
         .height(30)
 
-      ForEach(this.menuItem,(item: IndexHeader,index: number)=> {
+      ForEach(this.menuItem, (item: IndexHeader, index: number) => {
         Image(item.image)
           .width(20)
           .height(20)
@@ -33,13 +32,13 @@ export struct Header {
           .gesture(LongPressGesture()
             .onAction(() => {
               if (item.description) {
-                promptAction.showToast({message: item.description})
+                promptAction.showToast({ message: item.description })
               }
             }))
       })
 
     }
-    .padding({left: 15,right: 15,top: 5,bottom: 5})
+    .padding({ left: 15, right: 15, top: 5, bottom: 5 })
     .justifyContent(FlexAlign.Start)
 
   }

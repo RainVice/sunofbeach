@@ -79,3 +79,17 @@ export interface MoyuComment {
   subComments: SubComment[];
   vip: boolean;
 }
+
+/**
+ * 所有话题分类
+ */
+export interface Datum {
+  id: string;
+  topicName: string;
+  cover: string;
+  followCount: number;
+  contentCount: number;
+  hasFollowed: boolean;
+  description: string;
+}
+

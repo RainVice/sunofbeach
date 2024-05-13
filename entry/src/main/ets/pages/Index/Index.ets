@@ -27,6 +27,25 @@ struct Index {
                       menuItem: [
                         {
                           image: $r('app.media.ic_public_community_messages'), action: () => {
+                        }, description: $r('app.string.message')
+                        },
+                        {
+                          image: $r('app.media.ic_public_add_filled'), action: () => {
+                        }, description: $r('app.string.add_article')
+                        },
+                        {
+                          image: $r('app.media.ic_public_view_grid'), action: () => {
+                        }, description: $r('app.string.more_topics')
+                        },
+                      ]
+                    })
+                    Dawdling()
+                  }
+                  else if (index === 1) {
+                    Header({
+                      menuItem: [
+                        {
+                          image: $r('app.media.ic_public_community_messages'), action: () => {
                         }, description: "消息"
                         },
                         {
@@ -39,9 +58,6 @@ struct Index {
                         },
                       ]
                     })
-                    Dawdling()
-                  }
-                  else if (index === 1) {
                     Article()
                   }
                   else if (index === 2) {

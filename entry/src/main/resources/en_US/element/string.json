@@ -35,6 +35,22 @@
     {
       "name": "follow",
       "value": "follow"
+    },
+    {
+      "name": "enter_search_content",
+      "value": "Enter search content"
+    },
+    {
+      "name": "message",
+      "value": "message"
+    },
+    {
+      "name": "add_article",
+      "value": "Add article"
+    },
+    {
+      "name": "more_topics",
+      "value": "More topics"
     }
   ]
 }

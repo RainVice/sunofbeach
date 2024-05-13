@@ -1,6 +1,6 @@
 import { Send } from '../send'
 import { http } from '@kit.NetworkKit'
-import { MoyuComment, MoyuContent, TopicIndex, topicIndexs } from './model'
+import { Datum, MoyuComment, MoyuContent, TopicIndex, topicIndexs } from './model'
 import { ListInfo, SunData } from '..'
 import { resToObj } from '../util'
 
@@ -38,3 +38,14 @@ export const comment = async (momentId: string, page: number = 1, sort: number =
   const comment: ListInfo<MoyuComment> = resToObj<SunData<ListInfo<MoyuComment>>>(res).data
   return comment
 }
+
+/**
+ * 获取话题列表
+ */
+export const allTopic = async (): Promise<Datum[]> => {
+  const res: http.HttpResponse = await Send.get('/ct/moyu/topic')
+  const datum: Datum[] = resToObj<SunData<Datum[]>>(res).data
+  return datum
+}
+
+
