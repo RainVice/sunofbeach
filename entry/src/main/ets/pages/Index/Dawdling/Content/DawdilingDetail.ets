@@ -4,7 +4,7 @@ import { FULL_PERCENT } from '../../../../constants'
 import { SegmentButtonOptions } from '@kit.ArkUI'
 import { ItemRestriction, SegmentButton, SegmentButtonTextItem } from '@ohos.arkui.advanced.SegmentButton'
 import { ListAdapter } from '../../../../utils'
-import { RefreshList } from '../../../../component'
+import { NavDestinationHeader, RefreshList } from '../../../../component'
 
 
 export interface DawdilingDetailData {
@@ -14,7 +14,6 @@ export interface DawdilingDetailData {
 
 @Component
 export struct DawdilingDetail {
-  @Consume navPathStack: NavPathStack
   @State @Watch("loadComment") private moyuContent: moyu.MoyuContent | undefined = undefined
   @State private content: string | undefined = undefined
   @State private comments: moyu.MoyuComment[] | undefined = undefined
@@ -54,12 +53,9 @@ export struct DawdilingDetail {
 
   build() {
     NavDestination() {
-      if (this.moyuContent) {
-        Column({ space: 10 }) {
-          Row({ space: 10 }) {
-            Image($r('sys.media.ohos_ic_back')).width(20).height(20).onClick(() => {
-              this.navPathStack.pop()
-            })
+      Column({ space: 10 }) {
+        NavDestinationHeader() {
+          if (this.moyuContent) {
             Image(this.moyuContent?.avatar).width(30).height(30).borderRadius(100)
             Column({ space: 5 }) {
               Text(this.moyuContent?.nickname).fontWeight(FontWeight.Bold)
@@ -88,86 +84,86 @@ export struct DawdilingDetail {
               .width(20)
               .height(20)
           }
-          .height(56)
-          .width(FULL_PERCENT)
-          Refresh({refreshing: $$this.refreshing}){
-            Scroll() {
-              Column({ space: 10 }) {
-                DawsilingContent({ moyuContent: this.moyuContent, content: this.content })
-                  .width(FULL_PERCENT)
-                Divider()
-                  .width(FULL_PERCENT)
-                if (this.comments) {
-                  Column({ space: 10 }) {
-                    Row() {
-                      Text(`共 ${this.tabSelectedIndexes[0] === 0 ? this.total : this.moyuContent.thumbUpCount} 条${this.tabSelectedIndexes[0] === 0 ? "评论" : "点赞"}`)
-                        .fontSize(12)
-                        .fontWeight(FontWeight.Bold)
-                      Blank()
-                      SegmentButton({
-                        options: this.tabOptions,
-                        selectedIndexes: $tabSelectedIndexes
-                      }).width(80).height(30)
-                    }.width(FULL_PERCENT)
+        }
 
-                    if (this.tabSelectedIndexes[0] === 0) {
-                      if (this.commentAdapter) {
-                        RefreshList({
-                          listAdapter: $commentAdapter,
-                          hasNext: this.hasNext,
-                          bottomDistance: 100,
-                          nestedScrollOptions: {
-                            scrollForward: NestedScrollMode.PARENT_FIRST,
-                            scrollBackward: NestedScrollMode.SELF_FIRST
-                          },
-                          needRefresh: false,
-                          itemView: (item, index) => {
-                            this.commentItem(item as moyu.MoyuComment, index)
-                          },
-                          loading: async () => {
-                            await this.loading()
-                          }
-                        })
-                      }
-                    }
-                    else if (this.tabSelectedIndexes[0] === 1) {
-                      if (this.thumbUpAdapter) {
-                        RefreshList({
-                          listAdapter: $thumbUpAdapter,
-                          nestedScrollOptions: {
-                            scrollForward: NestedScrollMode.PARENT_FIRST,
-                            scrollBackward: NestedScrollMode.SELF_FIRST
-                          },
-                          bottomDistance: 100,
-                          needRefresh: false,
-                          itemView: (item, index) => {
-                            this.thumbUpItem(item as string, index)
-                          },
-                        })
-                      }
+        Refresh({ refreshing: $$this.refreshing }) {
+          Scroll() {
+            Column({ space: 10 }) {
+              DawsilingContent({ moyuContent: this.moyuContent, content: this.content })
+                .width(FULL_PERCENT)
+              Divider()
+                .width(FULL_PERCENT)
+              if (this.comments) {
+                Column({ space: 10 }) {
+                  Row() {
+                    Text(`共 ${this.tabSelectedIndexes[0] === 0 ? this.total : this.moyuContent?.thumbUpCount} 条${this.tabSelectedIndexes[0] === 0 ? "评论" : "点赞"}`)
+                      .fontSize(12)
+                      .fontWeight(FontWeight.Bold)
+                    Blank()
+                    SegmentButton({
+                      options: this.tabOptions,
+                      selectedIndexes: $tabSelectedIndexes
+                    }).width(80).height(30)
+                  }.width(FULL_PERCENT)
+
+                  if (this.tabSelectedIndexes[0] === 0) {
+                    if (this.commentAdapter) {
+                      RefreshList({
+                        listAdapter: $commentAdapter,
+                        hasNext: this.hasNext,
+                        bottomDistance: 100,
+                        nestedScrollOptions: {
+                          scrollForward: NestedScrollMode.PARENT_FIRST,
+                          scrollBackward: NestedScrollMode.SELF_FIRST
+                        },
+                        needRefresh: false,
+                        itemView: (item, index) => {
+                          this.commentItem(item as moyu.MoyuComment, index)
+                        },
+                        loading: async () => {
+                          await this.loading()
+                        }
+                      })
                     }
                   }
-                  .height(FULL_PERCENT)
-                  .width(FULL_PERCENT)
+                  else if (this.tabSelectedIndexes[0] === 1) {
+                    if (this.thumbUpAdapter) {
+                      RefreshList({
+                        listAdapter: $thumbUpAdapter,
+                        nestedScrollOptions: {
+                          scrollForward: NestedScrollMode.PARENT_FIRST,
+                          scrollBackward: NestedScrollMode.SELF_FIRST
+                        },
+                        bottomDistance: 100,
+                        needRefresh: false,
+                        itemView: (item, index) => {
+                          this.thumbUpItem(item as string, index)
+                        },
+                      })
+                    }
+                  }
                 }
+                .height(FULL_PERCENT)
+                .width(FULL_PERCENT)
               }
             }
-            .align(Alignment.Top)
-            .width(FULL_PERCENT)
-            .layoutWeight(1)
-            .scrollBar(BarState.Off)
           }
-          .onRefreshing(async () => {
-            await this.loadComment()
-            this.refreshing = false
-          })
-
+          .align(Alignment.Top)
+          .width(FULL_PERCENT)
+          .layoutWeight(1)
+          .scrollBar(BarState.Off)
         }
-        .padding({ left: 20, right: 20 })
-        .width(FULL_PERCENT)
-        .height(FULL_PERCENT)
-        .justifyContent(FlexAlign.Start)
+        .onRefreshing(async () => {
+          await this.loadComment()
+          this.refreshing = false
+        })
+
       }
+      .padding({ left: 20, right: 20 })
+      .width(FULL_PERCENT)
+      .height(FULL_PERCENT)
+      .justifyContent(FlexAlign.Start)
+
     }
     .hideTitleBar(true)
     .width(FULL_PERCENT)
@@ -192,7 +188,7 @@ export struct DawdilingDetail {
           .fontSize(10)
           .fontColor($r('app.color.second_text'))
           .margin({ top: 5 })
-        if (item.subComments.length >= 0) {
+        if (item.subComments.length) {
           Column({ space: 5 }) {
             ForEach((item as moyu.MoyuComment).subComments, (subItem: moyu.SubComment, index: number) => {
               this.subCommentItem(subItem, index)
@@ -248,7 +244,7 @@ struct ThumbUpItem {
   }
 
   build() {
-    if (this.userInfo){
+    if (this.userInfo) {
       Row({ space: 5 }) {
         Image(this.userInfo?.avatar).width(25).height(25).borderRadius(100)
         // Column({ space: 2 }) {

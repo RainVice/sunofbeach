@@ -1,8 +1,9 @@
-import { Dawdiling, FULL_PERCENT } from '../../constants'
+import { Dawdiling, DawdilingTopicCategorize, FULL_PERCENT } from '../../constants'
 import { IndexItem, indexItems } from '../../view_model'
 import { Article } from './Article/Article'
 import { Header } from './component/Header'
 import { DawdilingDetail } from './Dawdling/Content/DawdilingDetail'
+import { DawdilingAllTopic } from './Dawdling/Content/DawdilingAllTopic'
 import { Dawdling } from './Dawdling/Dawdling'
 import { Question } from './Question/Question'
 import { User } from './User/User'
@@ -35,6 +36,7 @@ struct Index {
                         },
                         {
                           image: $r('app.media.ic_public_view_grid'), action: () => {
+                          this.navPathStack.pushPath({name: DawdilingTopicCategorize})
                         }, description: $r('app.string.more_topics')
                         },
                       ]
@@ -93,6 +95,8 @@ struct Index {
   PageMap(name: string){
     if (name === Dawdiling){
       DawdilingDetail()
+    }else if(name === DawdilingTopicCategorize){
+      DawdilingAllTopic()
     }
   }
 

@@ -1,6 +1,7 @@
 {
   "src": [
     "pages/Index/Index",
-    "pages/ImagePreview/ImagePreview"
+    "pages/ImagePreview/ImagePreview",
+    "pages/Index/Dawdling/DawdilingTopicList"
   ]
 }

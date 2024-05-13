@@ -51,6 +51,14 @@
     {
       "name": "more_topics",
       "value": "More topics"
+    },
+    {
+      "name": "all_topic",
+      "value": "All topics"
+    },
+    {
+      "name": "followed",
+      "value": "Followed"
     }
   ]
 }

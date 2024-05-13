@@ -51,6 +51,14 @@
     {
       "name": "more_topics",
       "value": "更多话题"
+    },
+    {
+      "name": "all_topic",
+      "value": "全部话题"
+    },
+    {
+      "name": "followed",
+      "value": "已关注"
     }
   ]
 }
