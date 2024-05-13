@@ -31,6 +31,7 @@ export struct DawdilingDetail {
   @State private hasNext: boolean = false
   @State private currentPage: number = 0
   @State private total: number = 0
+  @State private refreshing: boolean = false
 
   async loadComment() {
     const commentList = await moyu.comment(this.moyuContent?.id as string)
@@ -89,70 +90,78 @@ export struct DawdilingDetail {
           }
           .height(56)
           .width(FULL_PERCENT)
+          Refresh({refreshing: $$this.refreshing}){
+            Scroll() {
+              Column({ space: 10 }) {
+                DawsilingContent({ moyuContent: this.moyuContent, content: this.content })
+                  .width(FULL_PERCENT)
+                Divider()
+                  .width(FULL_PERCENT)
+                if (this.comments) {
+                  Column({ space: 10 }) {
+                    Row() {
+                      Text(`共 ${this.tabSelectedIndexes[0] === 0 ? this.total : this.moyuContent.thumbUpCount} 条${this.tabSelectedIndexes[0] === 0 ? "评论" : "点赞"}`)
+                        .fontSize(12)
+                        .fontWeight(FontWeight.Bold)
+                      Blank()
+                      SegmentButton({
+                        options: this.tabOptions,
+                        selectedIndexes: $tabSelectedIndexes
+                      }).width(80).height(30)
+                    }.width(FULL_PERCENT)
 
-          Scroll() {
-            Column({ space: 10 }) {
-              DawsilingContent({ moyuContent: this.moyuContent, content: this.content })
-                .width(FULL_PERCENT)
-              Divider()
-                .width(FULL_PERCENT)
-              if (this.comments) {
-                Column({ space: 10 }) {
-                  Row() {
-                    Text(`共 ${this.tabSelectedIndexes[0] === 0 ? this.total : this.moyuContent.thumbUpCount} 条${this.tabSelectedIndexes[0] === 0 ? "评论" : "点赞"}`)
-                      .fontSize(12)
-                      .fontWeight(FontWeight.Bold)
-                    Blank()
-                    SegmentButton({
-                      options: this.tabOptions,
-                      selectedIndexes: $tabSelectedIndexes
-                    }).width(80).height(30)
-                  }.width(FULL_PERCENT)
-
-                  if (this.tabSelectedIndexes[0] === 0) {
-                    if (this.commentAdapter) {
-                      RefreshList({
-                        listAdapter: $commentAdapter,
-                        hasNext: this.hasNext,
-                        nestedScrollOptions: {
-                          scrollForward: NestedScrollMode.PARENT_FIRST,
-                          scrollBackward: NestedScrollMode.SELF_FIRST
-                        },
-                        needRefresh: false,
-                        itemView: (item, index) => {
-                          this.commentItem(item as moyu.MoyuComment, index)
-                        },
-                        loading: async () => {
-                          await this.loading()
-                        }
-                      })
+                    if (this.tabSelectedIndexes[0] === 0) {
+                      if (this.commentAdapter) {
+                        RefreshList({
+                          listAdapter: $commentAdapter,
+                          hasNext: this.hasNext,
+                          bottomDistance: 100,
+                          nestedScrollOptions: {
+                            scrollForward: NestedScrollMode.PARENT_FIRST,
+                            scrollBackward: NestedScrollMode.SELF_FIRST
+                          },
+                          needRefresh: false,
+                          itemView: (item, index) => {
+                            this.commentItem(item as moyu.MoyuComment, index)
+                          },
+                          loading: async () => {
+                            await this.loading()
+                          }
+                        })
+                      }
+                    }
+                    else if (this.tabSelectedIndexes[0] === 1) {
+                      if (this.thumbUpAdapter) {
+                        RefreshList({
+                          listAdapter: $thumbUpAdapter,
+                          nestedScrollOptions: {
+                            scrollForward: NestedScrollMode.PARENT_FIRST,
+                            scrollBackward: NestedScrollMode.SELF_FIRST
+                          },
+                          bottomDistance: 100,
+                          needRefresh: false,
+                          itemView: (item, index) => {
+                            this.thumbUpItem(item as string, index)
+                          },
+                        })
+                      }
                     }
                   }
-                  else if (this.tabSelectedIndexes[0] === 1) {
-                    if (this.thumbUpAdapter) {
-                      RefreshList({
-                        listAdapter: $thumbUpAdapter,
-                        nestedScrollOptions: {
-                          scrollForward: NestedScrollMode.PARENT_FIRST,
-                          scrollBackward: NestedScrollMode.SELF_FIRST
-                        },
-                        needRefresh: false,
-                        itemView: (item, index) => {
-                          this.thumbUpItem(item as string, index)
-                        },
-                      })
-                    }
-                  }
+                  .height(FULL_PERCENT)
+                  .width(FULL_PERCENT)
                 }
-                .height(FULL_PERCENT)
-                .width(FULL_PERCENT)
               }
             }
+            .align(Alignment.Top)
+            .width(FULL_PERCENT)
+            .layoutWeight(1)
+            .scrollBar(BarState.Off)
           }
-          .align(Alignment.Top)
-          .width(FULL_PERCENT)
-          .layoutWeight(1)
-          .scrollBar(BarState.Off)
+          .onRefreshing(async () => {
+            await this.loadComment()
+            this.refreshing = false
+          })
+
         }
         .padding({ left: 20, right: 20 })
         .width(FULL_PERCENT)
