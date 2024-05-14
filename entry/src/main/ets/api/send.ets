@@ -2,6 +2,7 @@ import { http } from '@kit.NetworkKit'
 import { SunData, SunHeader } from '.'
 import { resToObj } from './util'
 import { promptAction, router } from '@kit.ArkUI'
+import { UserAuthentication } from '../utils'
 
 export class Send {
   static readonly base_url: string = "https://api.sunofbeaches.com"
@@ -18,13 +19,23 @@ export class Send {
                             extraData: Object | undefined = undefined,
                             expectDataType: http.HttpDataType | undefined = undefined,
                             header: SunHeader | undefined = undefined): Promise<http.HttpResponse> {
-    const conf: http.HttpRequestOptions = extraData ? {
+
+    const token: string = await UserAuthentication.getToken()
+    if (token) {
+      if (header) header.cookie = `sob_token=${token}`
+      else header = { cookie: `sob_token=${token}` }
+    }
+
+    const conf: http.HttpRequestOptions = {
       method,
       extraData,
       header
-    } : { method }
+    }
     const connect = http.createHttp()
     const res = await connect.request(url.includes('http') ? url : Send.base_url + url, conf)
+    if (res.header["sob_token"]){
+      UserAuthentication.setToken(res.header["sob_token"])
+    }
 
     if (expectDataType === http.HttpDataType.ARRAY_BUFFER) {
       return res

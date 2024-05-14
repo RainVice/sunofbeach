@@ -8,6 +8,8 @@ import { resToObj } from '../util'
 import { SunData } from '..'
 import { cryptoFramework } from '@kit.CryptoArchitectureKit'
 import { buffer, util } from '@kit.ArkTS'
+import { promptAction } from '@kit.ArkUI'
+import { UserAuthentication } from '../../utils'
 
 /**
  * 获取图灵码
@@ -48,9 +50,18 @@ export const avatar = async (phoneNum: string): Promise<string> => {
 /**
  * 登录
  */
-export const login = async (phoneNum: string, password: string, captcha: string, l_c_i: string) => {
+export const login = async (phoneNum: string, password: string, captcha: string, l_c_i: string | undefined) : Promise<boolean> => {
   const md5 = cryptoFramework.createMd('MD5')
   await md5.update({ data: new Uint8Array(buffer.from(password).buffer) })
-  password = util.TextDecoder.create().decodeWithStream((await md5.digest()).data).toString()
-  await Send.post(`/uc/user/login/${captcha}`, { phoneNum, password } as LoginParam, undefined, { l_c_i })
+  password = buffer.from((await md5.digest()).data).toString('hex')
+  const res = await Send.post(`/uc/user/login/${captcha}`, { phoneNum, password } as LoginParam, undefined, { l_c_i })
+  const message: SunData<undefined> = resToObj<SunData<undefined>>(res)
+  if (message.success) {
+    UserAuthentication.setToken(res.header["sob_token"])
+  }else{
+    promptAction.showToast({
+      message: message.message
+    })
+  }
+  return message.success
 }

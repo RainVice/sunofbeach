@@ -27,6 +27,7 @@ export interface ListInfo<T> {
 export interface SunHeader{
 
   l_c_i?: string
+  cookie?: string
 
 
 }

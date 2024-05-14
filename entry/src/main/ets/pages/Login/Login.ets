@@ -2,6 +2,7 @@ import { user } from '../../api'
 import { TitleBar } from '../../component'
 import { FULL_PERCENT, phoneRegex } from '../../constants'
 import { image } from '@kit.ImageKit'
+import { router } from '@kit.ArkUI'
 
 @Entry
 @Component
@@ -12,10 +13,23 @@ struct Login {
   @State avatar: string = ''
   @State phoneNum: string = ''
   @State password: string = ''
+  @State captchaText: string = ''
 
   async aboutToAppear(): Promise<void> {
+    this.loadCaptcha()
+  }
+
+  async loadCaptcha() {
     this.captcha = await user.captcha()
     this.captchaImage = await image.createImageSource(this.captcha.image).createPixelMap()
+  }
+
+  async login(){
+    if (await user.login(this.phoneNum,this.password,this.captchaText,this.captcha?.l_c_i)) {
+      router.back()
+    }else{
+      this.loadCaptcha()
+    }
   }
 
   build() {
@@ -50,11 +64,14 @@ struct Login {
           .type(InputType.Password)
 
         Row({space: 10}){
-          TextInput({ placeholder: "输入图形验证码" })
+          TextInput({ text: $$this.captchaText,placeholder: "输入图形验证码" })
             .fontSize(20)
             .height(50)
             .layoutWeight(1)
           Image(this.captchaImage).height(50)
+            .onClick(() => {
+              this.loadCaptcha()
+            })
         }
         .width(FULL_PERCENT)
 
@@ -62,6 +79,9 @@ struct Login {
           .width(FULL_PERCENT)
           .type(ButtonType.Normal)
           .borderRadius(8)
+          .onClick(async () => {
+            await this.login()
+          })
 
         Row({space: 20}){
           Text("忘记密码")
@@ -80,6 +100,5 @@ struct Login {
     .justifyContent(FlexAlign.Start)
     .height(FULL_PERCENT)
     .width(FULL_PERCENT)
-
   }
 }
