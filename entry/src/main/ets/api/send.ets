@@ -1,5 +1,5 @@
 import { http } from '@kit.NetworkKit'
-import { SunData } from '.'
+import { SunData, SunHeader } from '.'
 import { resToObj } from './util'
 import { promptAction, router } from '@kit.ArkUI'
 
@@ -13,10 +13,15 @@ export class Send {
    * @param extraData
    * @returns
    */
-  private static async send(url: string, method: http.RequestMethod, extraData: Object | undefined, expectDataType: http.HttpDataType | undefined): Promise<http.HttpResponse> {
+  private static async send(url: string,
+                            method: http.RequestMethod,
+                            extraData: Object | undefined = undefined,
+                            expectDataType: http.HttpDataType | undefined = undefined,
+                            header: SunHeader | undefined = undefined): Promise<http.HttpResponse> {
     const conf: http.HttpRequestOptions = extraData ? {
       method,
       extraData,
+      header
     } : { method }
     const connect = http.createHttp()
     const res = await connect.request(url.includes('http') ? url : Send.base_url + url, conf)
@@ -34,7 +39,7 @@ export class Send {
         message: temp.message
       })
       if (temp.code === 11126) {
-        router.pushUrl({
+        await router.pushUrl({
           url: 'pages/Login/Login'
         })
       }
@@ -48,8 +53,11 @@ export class Send {
    * @param extraData
    * @returns
    */
-  public static async get(url: string, extraData: Object | undefined = undefined, expectDataType: http.HttpDataType | undefined = undefined): Promise<http.HttpResponse> {
-    return await Send.send(url, http.RequestMethod.GET, extraData, expectDataType)
+  public static async get(url: string,
+                          extraData: Object | undefined = undefined,
+                          expectDataType: http.HttpDataType | undefined = undefined,
+                          header: SunHeader | undefined = undefined): Promise<http.HttpResponse> {
+    return await Send.send(url, http.RequestMethod.GET, extraData, expectDataType, header)
   }
 
   /**
@@ -58,7 +66,10 @@ export class Send {
    * @param extraData
    * @returns
    */
-  public static async post(url: string, extraData: Object | undefined = undefined, expectDataType: http.HttpDataType | undefined = undefined): Promise<http.HttpResponse> {
-    return await Send.send(url, http.RequestMethod.POST, extraData, expectDataType)
+  public static async post(url: string,
+                           extraData: Object | undefined = undefined,
+                           expectDataType: http.HttpDataType | undefined = undefined,
+                           header: SunHeader | undefined = undefined): Promise<http.HttpResponse> {
+    return await Send.send(url, http.RequestMethod.POST, extraData, expectDataType, header)
   }
 }

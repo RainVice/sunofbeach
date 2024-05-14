@@ -19,3 +19,17 @@ export interface UserInfo {
   area: string;
   vip: boolean;
 }
+
+
+/**
+ * 获取图灵码需要的参赛
+ */
+export interface CaptchaParam{ code: number }
+
+/**
+ * 登录账号密码参数
+ */
+export interface LoginParam{
+  phoneNum: string
+  password: string
+}

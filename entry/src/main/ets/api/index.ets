@@ -23,3 +23,10 @@ export interface ListInfo<T> {
   totalPage: number
 
 }
+
+export interface SunHeader{
+
+  l_c_i?: string
+
+
+}

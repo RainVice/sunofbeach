@@ -3,17 +3,21 @@
  */
 import { Send } from '../send'
 import { http } from '@kit.NetworkKit'
-import { Captcha, UserInfo } from './model'
+import { Captcha, CaptchaParam, LoginParam, UserInfo } from './model'
 import { resToObj } from '../util'
 import { SunData } from '..'
+import { cryptoFramework } from '@kit.CryptoArchitectureKit'
+import { buffer, util } from '@kit.ArkTS'
 
 /**
  * 获取图灵码
  * @param code 随机数
  */
-interface CaptchaParam{ code: number }
+
 export const captcha = async (code: number = Math.random()): Promise<Captcha> => {
-  const res: http.HttpResponse = await Send.get(`/uc/ut/captcha`, { code: code } as CaptchaParam, http.HttpDataType.ARRAY_BUFFER)
+  const res: http.HttpResponse = await Send.get(`/uc/ut/captcha`, {
+    code: code
+  } as CaptchaParam, http.HttpDataType.ARRAY_BUFFER)
   return {
     image: res.result as ArrayBuffer,
     l_c_i: res.header["l_c_i"]
@@ -35,8 +39,18 @@ export const user_info = async (userId: string): Promise<UserInfo> => {
  * @param phoneNum 手机号
  */
 
-export const avatar = async(phoneNum: string): Promise<string> => {
+export const avatar = async (phoneNum: string): Promise<string> => {
   const res: http.HttpResponse = await Send.get(`https://api.sunofbeach.net/uc/user/avatar/${phoneNum}`)
   const avatar: string = resToObj<SunData<string>>(res).data
   return avatar
+}
+
+/**
+ * 登录
+ */
+export const login = async (phoneNum: string, password: string, captcha: string, l_c_i: string) => {
+  const md5 = cryptoFramework.createMd('MD5')
+  await md5.update({ data: new Uint8Array(buffer.from(password).buffer) })
+  password = util.TextDecoder.create().decodeWithStream((await md5.digest()).data).toString()
+  await Send.post(`/uc/user/login/${captcha}`, { phoneNum, password } as LoginParam, undefined, { l_c_i })
 }
