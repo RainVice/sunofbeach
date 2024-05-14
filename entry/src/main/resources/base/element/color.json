@@ -55,6 +55,10 @@
     {
       "name": "auxiliary",
       "value": "#49BD38"
+    },
+    {
+      "name": "error_text",
+      "value": "#FFFF4A4A"
     }
   ]
 }

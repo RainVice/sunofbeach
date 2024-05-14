@@ -2,7 +2,6 @@ import { moyu } from '../../../../api/index'
 import { NavDestinationHeader, RefreshList } from '../../../../component/index'
 import { FULL_PERCENT } from '../../../../constants/index'
 import { ListAdapter } from '../../../../utils/index'
-import { ComposeTitleBar } from '@kit.ArkUI'
 
 @Component
 export struct DawdilingAllTopic {
@@ -46,6 +45,7 @@ export struct DawdilingAllTopic {
   gridItem(item: moyu.Datum, index: number) {
     Row({space: 8}) {
       Image(item.cover).autoResize(true).height(50).width(50)
+        .alt($r('app.media.image_error'))
       Column({space: 2}) {
         Text(item.topicName)
           .fontSize(14)
@@ -72,8 +72,5 @@ export struct DawdilingAllTopic {
     }
     .justifyContent(FlexAlign.Start)
     .width(FULL_PERCENT)
-    .onClick(() => {
-
-    })
   }
 }

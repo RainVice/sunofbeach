@@ -24,6 +24,7 @@ export struct Header {
 
       ForEach(this.menuItem, (item: IndexHeader, index: number) => {
         Image(item.image)
+          .alt($r('app.media.image_error'))
           .width(20)
           .height(20)
           .onClick(() => {

@@ -57,6 +57,8 @@ export struct DawdilingDetail {
         NavDestinationHeader() {
           if (this.moyuContent) {
             Image(this.moyuContent?.avatar).width(30).height(30).borderRadius(100)
+              .alt($r('app.media.image_error'))
+              .autoResize(true)
             Column({ space: 5 }) {
               Text(this.moyuContent?.nickname).fontWeight(FontWeight.Bold)
                 .fontSize(12)
@@ -179,6 +181,8 @@ export struct DawdilingDetail {
   commentItem(item: moyu.MoyuComment, index: number) {
     Row({ space: 10 }) {
       Image(item.avatar).width(30).height(30).borderRadius(100).autoResize(true)
+        .autoResize(true)
+        .alt($r('app.media.image_error'))
       Column({ space: 5 }) {
         Text(item.nickname)
           .fontSize(14)
@@ -247,6 +251,8 @@ struct ThumbUpItem {
     if (this.userInfo) {
       Row({ space: 5 }) {
         Image(this.userInfo?.avatar).width(25).height(25).borderRadius(100)
+          .autoResize(true)
+          .alt($r('app.media.image_error'))
         // Column({ space: 2 }) {
         Text(this.userInfo?.nickname).fontWeight(FontWeight.Bold)
           .fontColor(this.userInfo?.vip ? $r('app.color.vip') : $r('app.color.second_text'))

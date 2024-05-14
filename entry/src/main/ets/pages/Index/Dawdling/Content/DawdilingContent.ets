@@ -19,6 +19,7 @@ export struct DawsilingContent {
       Flex({ wrap: FlexWrap.Wrap }) {
         ForEach(this.moyuContent?.images, (item: string, index: number) => {
           Image(item)
+            .alt($r('app.media.image_error'))
             .sharedTransition(JSON.stringify(item) + index)
             .height(80)
             .width(80)

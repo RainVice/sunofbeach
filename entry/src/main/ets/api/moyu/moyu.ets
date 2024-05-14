@@ -23,6 +23,9 @@ export const topic = async (): Promise<TopicIndex[]> => {
  */
 export const listForTopicId = async (topicId: string, page: number): Promise<ListInfo<MoyuContent>> => {
   const res: http.HttpResponse = await Send.get(`/ct/moyu/list/${topicId}/${page}`)
+  if (topicId === 'follow') {
+    console.log(JSON.stringify(res));
+  }
   const moyu: ListInfo<MoyuContent> = resToObj<SunData<ListInfo<MoyuContent>>>(res).data
   return moyu
 }

@@ -6,7 +6,7 @@ import { DawdilingDetailData } from './DawdilingDetail'
 
 @Component
 export struct DawdlingCard {
-  @Prop moyuContent: moyu.MoyuContent
+  @Require @Prop moyuContent: moyu.MoyuContent
   @State content: string = ''
   @Consume navPathStack: NavPathStack
 
@@ -24,6 +24,8 @@ export struct DawdlingCard {
         // 头像
         Row({ space: 10 }) {
           Image(this.moyuContent?.avatar).width(30).height(30).borderRadius(100)
+            .autoResize(true)
+            .alt($r('app.media.image_error'))
           Column({ space: 2 }) {
             Text(this.moyuContent?.nickname).fontWeight(FontWeight.Bold)
               .fontColor(this.moyuContent?.vip ? $r('app.color.vip') : $r('app.color.second_text'))
