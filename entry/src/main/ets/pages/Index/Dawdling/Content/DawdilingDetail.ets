@@ -33,7 +33,7 @@ export struct DawdilingDetail {
   @State private refreshing: boolean = false
 
   async loadComment() {
-    const commentList = await moyu.comment(this.moyuContent?.id as string)
+    const commentList = await moyu.commentList(this.moyuContent?.id as string)
     this.comments = commentList.list
     this.total = commentList.total
     this.hasNext = commentList.hasNext
@@ -43,7 +43,7 @@ export struct DawdilingDetail {
 
   async loading() {
     if (this.hasNext) {
-      const commentList: ListInfo<moyu.MoyuComment> = await moyu.comment(this.moyuContent?.id as string, this.currentPage + 1)
+      const commentList: ListInfo<moyu.MoyuComment> = await moyu.commentList(this.moyuContent?.id as string, this.currentPage + 1)
       this.comments?.push(...commentList.list)
       this.hasNext = commentList.hasNext
       this.currentPage = commentList.currentPage
@@ -56,7 +56,10 @@ export struct DawdilingDetail {
       Column({ space: 10 }) {
         NavDestinationHeader() {
           if (this.moyuContent) {
-            Image(this.moyuContent?.avatar).width(30).height(30).borderRadius(100)
+            Image(this.moyuContent?.avatar)
+              .width(30)
+              .height(30)
+              .borderRadius(100)
               .alt($r('app.media.image_error'))
               .autoResize(true)
             Column({ space: 5 }) {
@@ -159,6 +162,22 @@ export struct DawdilingDetail {
           await this.loadComment()
           this.refreshing = false
         })
+        .layoutWeight(1)
+
+        // todo 回复动态
+        Divider()
+        Row({ space: 15 }) {
+          Text("写回复")
+            .fontColor($r('app.color.second_text'))
+            .borderRadius(100)
+            .padding({ left: 20,right: 20,top: 10,bottom: 10})
+            .layoutWeight(1)
+            .backgroundColor($r('app.color.list_back'))
+          Image($r('app.media.ic_public_thumbsup')).height(20).width(20)
+          Image($r('app.media.ic_public_share')).height(20).width(20)
+        }
+        .padding(8)
+        .height(80)
 
       }
       .padding({ left: 20, right: 20 })
@@ -180,7 +199,11 @@ export struct DawdilingDetail {
   @Builder
   commentItem(item: moyu.MoyuComment, index: number) {
     Row({ space: 10 }) {
-      Image(item.avatar).width(30).height(30).borderRadius(100).autoResize(true)
+      Image(item.avatar)
+        .width(30)
+        .height(30)
+        .borderRadius(100)
+        .autoResize(true)
         .autoResize(true)
         .alt($r('app.media.image_error'))
       Column({ space: 5 }) {
@@ -250,7 +273,10 @@ struct ThumbUpItem {
   build() {
     if (this.userInfo) {
       Row({ space: 5 }) {
-        Image(this.userInfo?.avatar).width(25).height(25).borderRadius(100)
+        Image(this.userInfo?.avatar)
+          .width(25)
+          .height(25)
+          .borderRadius(100)
           .autoResize(true)
           .alt($r('app.media.image_error'))
         // Column({ space: 2 }) {

@@ -4,7 +4,7 @@
 import { Send } from '../send'
 import { http } from '@kit.NetworkKit'
 import { Category, CtContent } from './model'
-import { ListInfo, SunData } from '..'
+import { ListInfo, SobData } from '..'
 import { resToObj } from '../util'
 
 /**
@@ -12,7 +12,7 @@ import { resToObj } from '../util'
  */
 export const category = async (): Promise<Category[]> => {
   const res: http.HttpResponse = await Send.get("/ct/category/list")
-  let category: Category[] = resToObj<SunData<Category[]>>(res).data
+  let category: Category[] = resToObj<SobData<Category[]>>(res).data
   return category
 }
 
@@ -22,6 +22,6 @@ export const category = async (): Promise<Category[]> => {
  */
 export const recommend_content = async (page: number = 1): Promise<ListInfo<CtContent>> => {
   const res: http.HttpResponse = await Send.get(`/ct/content/home/recommend/${page}`)
-  let recommend: ListInfo<CtContent> = resToObj<SunData<ListInfo<CtContent>>>(res).data
+  let recommend: ListInfo<CtContent> = resToObj<SobData<ListInfo<CtContent>>>(res).data
   return recommend
 }

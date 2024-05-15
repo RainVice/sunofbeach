@@ -6,7 +6,7 @@ import { ListAdapter } from '../../../../utils/index'
 @Component
 export struct DawdilingAllTopic {
   @State topics: moyu.Datum[] = []
-  @State adapter: ListAdapter<moyu.Datum> | undefined = undefined
+  @State adapter: ListAdapter<moyu.Datum> = new ListAdapter<moyu.Datum>([])
 
   async aboutToAppear(): Promise<void> {
     await this.refresh()
@@ -14,7 +14,7 @@ export struct DawdilingAllTopic {
 
   async refresh(){
     this.topics = await moyu.allTopic()
-    this.adapter = new ListAdapter<moyu.Datum>(this.topics)
+    this.adapter.setData(this.topics)
   }
 
   build() {
@@ -63,11 +63,25 @@ export struct DawdilingAllTopic {
         Text($r('app.string.followed'))
           .fontSize(12)
           .fontColor($r('app.color.selected_background_for_component'))
+          .onClick(async () => {
+            await moyu.unfollowTopic(item.id)
+            this.adapter.notifyDataChange(index,(data) => {
+              data.hasFollowed = false
+            })
+          })
+
       }
       else {
         Text($r('app.string.follow'))
           .fontSize(12)
           .fontColor($r('app.color.auxiliary'))
+          .onClick(async () => {
+            if (await moyu.followTopic(item.id)) {
+              this.adapter.notifyDataChange(index,(data) => {
+                data.hasFollowed = true
+              })
+            }
+          })
       }
     }
     .justifyContent(FlexAlign.Start)

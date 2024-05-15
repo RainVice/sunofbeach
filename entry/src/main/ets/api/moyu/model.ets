@@ -20,7 +20,7 @@ export const topicIndexs: TopicIndex[] = [
 
 
 /**
- * 摸鱼动态列表
+ * 摸鱼动态列表，发表动态返回值
  */
 export interface MoyuContent {
   id: string;
@@ -93,3 +93,10 @@ export interface Datum {
   description: string;
 }
 
+/**
+ * 发表评论所需参数
+ */
+export interface CommentParam{
+  momentId: string
+  content: string
+}

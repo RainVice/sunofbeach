@@ -1,5 +1,5 @@
 import { http } from '@kit.NetworkKit'
-import { SunData, SunHeader } from '.'
+import { SobData, SunHeader } from '.'
 import { resToObj } from './util'
 import { promptAction, router } from '@kit.ArkUI'
 import { UserAuthentication } from '../utils'
@@ -41,7 +41,7 @@ export class Send {
       return res
     }
 
-    const temp: SunData<null> = resToObj<SunData<null>>(res)
+    const temp: SobData<null> = resToObj<SobData<null>>(res)
     if (temp.success) {
       return res
     }
@@ -83,4 +83,22 @@ export class Send {
                            header: SunHeader | undefined = undefined): Promise<http.HttpResponse> {
     return await Send.send(url, http.RequestMethod.POST, extraData, expectDataType, header)
   }
+
+  /**
+   * delete 请求
+   * @param url
+   * @param extraData
+   * @param expectDataType
+   * @param header
+   * @returns
+   */
+  public static async delete(url: string,
+                           extraData: Object | undefined = undefined,
+                           expectDataType: http.HttpDataType | undefined = undefined,
+                           header: SunHeader | undefined = undefined): Promise<http.HttpResponse> {
+    return await Send.send(url, http.RequestMethod.DELETE, extraData, expectDataType, header)
+  }
+
+
+
 }

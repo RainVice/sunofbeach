@@ -59,6 +59,34 @@
     {
       "name": "followed",
       "value": "已关注"
+    },
+    {
+      "name": "login",
+      "value": "登录"
+    },
+    {
+      "name": "sob_user_login",
+      "value": "阳光沙滩账号登录"
+    },
+    {
+      "name": "input_phone",
+      "value": "输入手机号"
+    },
+    {
+      "name": "input_password",
+      "value": "输入密码"
+    },
+    {
+      "name": "input_verification_code",
+      "value": "输入图形验证码"
+    },
+    {
+      "name": "forgot_password",
+      "value": "忘记密码"
+    },
+    {
+      "name": "register",
+      "value": "注册用户"
     }
   ]
 }

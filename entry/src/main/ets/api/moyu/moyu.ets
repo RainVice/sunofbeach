@@ -1,8 +1,9 @@
 import { Send } from '../send'
 import { http } from '@kit.NetworkKit'
-import { Datum, MoyuComment, MoyuContent, TopicIndex, topicIndexs } from './model'
-import { ListInfo, SunData } from '..'
+import { CommentParam, Datum, MoyuComment, MoyuContent, TopicIndex, topicIndexs } from './model'
+import { ListInfo, SobData } from '..'
 import { resToObj } from '../util'
+import { promptAction } from '@kit.ArkUI'
 
 
 /**
@@ -10,7 +11,7 @@ import { resToObj } from '../util'
  */
 export const topic = async (): Promise<TopicIndex[]> => {
   const res: http.HttpResponse = await Send.get("/ct/moyu/topic/index")
-  const topicIndex: TopicIndex[] = resToObj<SunData<TopicIndex[]>>(res).data
+  const topicIndex: TopicIndex[] = resToObj<SobData<TopicIndex[]>>(res).data
   topicIndex.unshift(...topicIndexs)
   return topicIndex
 }
@@ -26,7 +27,7 @@ export const listForTopicId = async (topicId: string, page: number): Promise<Lis
   if (topicId === 'follow') {
     console.log(JSON.stringify(res));
   }
-  const moyu: ListInfo<MoyuContent> = resToObj<SunData<ListInfo<MoyuContent>>>(res).data
+  const moyu: ListInfo<MoyuContent> = resToObj<SobData<ListInfo<MoyuContent>>>(res).data
   return moyu
 }
 
@@ -36,9 +37,9 @@ export const listForTopicId = async (topicId: string, page: number): Promise<Lis
  * page：页码，第1页开始
  * sort：1表示按时间降序，旧的在后面，0表示按时间升序，新的在后面
  */
-export const comment = async (momentId: string, page: number = 1, sort: number = 1): Promise<ListInfo<MoyuComment>>   => {
+export const commentList = async (momentId: string, page: number = 1, sort: number = 1): Promise<ListInfo<MoyuComment>>   => {
   const res: http.HttpResponse = await Send.get(`/ct/moyu/comment/${momentId}/${page}?sort=${sort}`)
-  const comment: ListInfo<MoyuComment> = resToObj<SunData<ListInfo<MoyuComment>>>(res).data
+  const comment: ListInfo<MoyuComment> = resToObj<SobData<ListInfo<MoyuComment>>>(res).data
   return comment
 }
 
@@ -47,8 +48,40 @@ export const comment = async (momentId: string, page: number = 1, sort: number =
  */
 export const allTopic = async (): Promise<Datum[]> => {
   const res: http.HttpResponse = await Send.get('/ct/moyu/topic')
-  const datum: Datum[] = resToObj<SunData<Datum[]>>(res).data
+  const datum: Datum[] = resToObj<SobData<Datum[]>>(res).data
   return datum
 }
 
+/**
+ * 关注话题
+ */
+export const followTopic = async (id: string) : Promise<boolean>=> {
+  const res: http.HttpResponse = await Send.post(`/ct/moyu/topic/follow/${id}`)
+  const data: SobData<undefined> = resToObj<SobData<undefined>>(res)
+  promptAction.showToast({
+    message: data.message
+  })
+  return data.success
+}
+
+/**
+ * 取消关注话题
+ */
+export const unfollowTopic = async (id: string) : Promise<boolean>=> {
+  const res: http.HttpResponse = await Send.delete(`/ct/moyu/topic/follow/${id}`)
+  const data: SobData<undefined> = resToObj<SobData<undefined>>(res)
+  promptAction.showToast({
+    message: data.message
+  })
+  return data.success
+}
+
+/**
+ * 发表评论
+ */
+export const comment = async (momentId: string,content: string): Promise<boolean> => {
+  const res : http.HttpResponse = await Send.post('/ct/moyu/comment',{momentId,content} as CommentParam)
+  const result: SobData<undefined> = resToObj<SobData<undefined>>(res)
+  return result.success
+}
 

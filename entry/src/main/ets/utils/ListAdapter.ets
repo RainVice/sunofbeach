@@ -29,7 +29,13 @@ export class ListAdapter<T> implements IDataSource{
     }
   }
 
-
+  // 通知LazyForEach组件在index对应索引处数据有变化，需要重建该子组件
+  notifyDataChange(index: number,action: (t:T) => void): void {
+    action(this.list[index])
+    this.listeners.forEach(listener => {
+      listener.onDataChange(index);
+    })
+  }
 
   addData(...t: T[]){
     this.list.push(...t)

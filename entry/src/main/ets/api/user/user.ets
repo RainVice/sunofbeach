@@ -3,9 +3,9 @@
  */
 import { Send } from '../send'
 import { http } from '@kit.NetworkKit'
-import { Captcha, CaptchaParam, LoginParam, UserInfo } from './model'
+import { Captcha, CaptchaParam, LoginParam, UserInfo, UserToken } from './model'
 import { resToObj } from '../util'
-import { SunData } from '..'
+import { SobData } from '..'
 import { cryptoFramework } from '@kit.CryptoArchitectureKit'
 import { buffer, util } from '@kit.ArkTS'
 import { promptAction } from '@kit.ArkUI'
@@ -32,7 +32,7 @@ export const captcha = async (code: number = Math.random()): Promise<Captcha> =>
  */
 export const user_info = async (userId: string): Promise<UserInfo> => {
   const res: http.HttpResponse = await Send.get(`/uc/user-info/${userId}`)
-  const userInfo: UserInfo = resToObj<SunData<UserInfo>>(res).data
+  const userInfo: UserInfo = resToObj<SobData<UserInfo>>(res).data
   return userInfo
 }
 
@@ -43,7 +43,7 @@ export const user_info = async (userId: string): Promise<UserInfo> => {
 
 export const avatar = async (phoneNum: string): Promise<string> => {
   const res: http.HttpResponse = await Send.get(`https://api.sunofbeach.net/uc/user/avatar/${phoneNum}`)
-  const avatar: string = resToObj<SunData<string>>(res).data
+  const avatar: string = resToObj<SobData<string>>(res).data
   return avatar
 }
 
@@ -55,7 +55,7 @@ export const login = async (phoneNum: string, password: string, captcha: string,
   await md5.update({ data: new Uint8Array(buffer.from(password).buffer) })
   password = buffer.from((await md5.digest()).data).toString('hex')
   const res = await Send.post(`/uc/user/login/${captcha}`, { phoneNum, password } as LoginParam, undefined, { l_c_i })
-  const message: SunData<undefined> = resToObj<SunData<undefined>>(res)
+  const message: SobData<undefined> = resToObj<SobData<undefined>>(res)
   if (message.success) {
     UserAuthentication.setToken(res.header["sob_token"])
   }else{
@@ -65,3 +65,17 @@ export const login = async (phoneNum: string, password: string, captcha: string,
   }
   return message.success
 }
+
+/**
+ * token 检查
+ */
+export const checkToken = async (): Promise<UserToken> => {
+  const res: http.HttpResponse = await Send.get('/uc/user/checkToken')
+  const userToken : UserToken = resToObj<SobData<UserToken>>(res).data
+  if(userToken){
+    UserAuthentication.setUserId(userToken.id)
+  }
+  return userToken
+}
+
+

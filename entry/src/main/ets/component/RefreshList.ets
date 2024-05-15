@@ -46,10 +46,10 @@ export struct RefreshList {
         .padding({ top: this.topDistance })
         .width(FULL_PERCENT)
         .height(FULL_PERCENT)
-        .onVisibleAreaChange([0.8],() => {
+        .onVisibleAreaChange([0.8], () => {
           this.isRefreshing = false
         })
-      }else{
+      } else {
         this.list()
       }
 
@@ -58,7 +58,7 @@ export struct RefreshList {
   }
 
   @Builder
-  list(){
+  list() {
     List({ space: this.space, scroller: this.listScroller }) {
       // ListItem()
       // ListItem().height(this.topDistance)
@@ -74,7 +74,7 @@ export struct RefreshList {
         ListItem() {
           this.itemView(item, index)
         }
-      },(item: object, index: number) => JSON.stringify(item) + index)
+      }, (item: object, index: number) => JSON.stringify(item) + index)
       if (this.isLoading && this.hasNext) {
         ListItem() {
           SwipeRefresher({
@@ -86,10 +86,17 @@ export struct RefreshList {
       if (!this.hasNext || this.listAdapter.totalCount() === 0) {
         ListItem() {
           Row() {
-            Text("没有更多了")
+            Text(this.needRefresh ? "没有更多了，点击刷新" : "没有更多了")
               .fontSize(12)
               .fontColor($r('app.color.third_text'))
-          }.width(FULL_PERCENT)
+          }
+          .onClick(() => {
+            if (this.needRefresh) {
+              this.listScroller.scrollToIndex(0)
+              this.isRefreshing = true
+            }
+          })
+          .width(FULL_PERCENT)
           .justifyContent(FlexAlign.Center)
         }.height(50)
       }

@@ -33,3 +33,18 @@ export interface LoginParam{
   phoneNum: string
   password: string
 }
+
+/**
+ * 检查token
+ */
+export interface UserToken{
+  id: string;
+  roles?: string;
+  lev: number;
+  isVip: string;
+  avatar: string;
+  nickname: string;
+  token?: string;
+  fansCount?: number;
+  followCount?: number;
+}

@@ -5,7 +5,7 @@ export * as content from './content'
 export * as moyu from './moyu'
 
 
-export interface SunData<T> {
+export interface SobData<T> {
   success: boolean;
   code: number;
   message: string;

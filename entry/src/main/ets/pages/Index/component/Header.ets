@@ -1,17 +1,20 @@
 import { IndexHeader } from '../../../view_model'
 import { promptAction } from '@kit.ArkUI'
+import { user } from '../../../api'
 
 @Component
 export struct Header {
+  @StorageProp("userInfo") userInfo: user.UserInfo | null = null
   @Prop menuItem: IndexHeader[] = []
 
   build() {
 
     Row({ space: 15 }) {
-      Image(null).borderRadius(100)
+      Image(this.userInfo ? this.userInfo.avatar : null).borderRadius(100)
+        .alt($r('app.media.fingerprint'))
         .width(30)
         .height(30)
-        .backgroundColor(Color.Black)
+        // .backgroundColor(Color.Black)
       Search({
         placeholder: $r('app.string.enter_search_content')
       })

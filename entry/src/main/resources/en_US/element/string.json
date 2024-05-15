@@ -59,6 +59,34 @@
     {
       "name": "followed",
       "value": "Followed"
+    },
+    {
+      "name": "login",
+      "value": "Login"
+    },
+    {
+      "name": "sob_user_login",
+      "value": "SOB User"
+    },
+    {
+      "name": "input_phone",
+      "value": "Input Phone"
+    },
+    {
+      "name": "input_password",
+      "value": "Input Password"
+    },
+    {
+      "name": "input_verification_code",
+      "value": "Input verification code"
+    },
+    {
+      "name": "forgot_password",
+      "value": "Forgot"
+    },
+    {
+      "name": "register",
+      "value": "Register"
     }
   ]
 }
