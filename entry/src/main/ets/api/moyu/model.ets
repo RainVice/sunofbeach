@@ -100,3 +100,13 @@ export interface CommentParam{
   momentId: string
   content: string
 }
+
+/**
+ * 回复评论所需参数
+ */
+export interface SubCommentParam{
+  content: string
+  momentId: string
+  targetUserId: string
+  commentId: string
+}

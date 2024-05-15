@@ -3,7 +3,7 @@ export class ListAdapter<T> implements IDataSource{
   private list: T[] = []
   private listeners: DataChangeListener[] = [];
 
-  constructor(list: T[]) {
+  constructor(list: T[] = []) {
     this.list = list
   }
 

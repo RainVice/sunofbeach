@@ -4,7 +4,7 @@ import { FULL_PERCENT } from '../../../../constants'
 import { SegmentButtonOptions } from '@kit.ArkUI'
 import { ItemRestriction, SegmentButton, SegmentButtonTextItem } from '@ohos.arkui.advanced.SegmentButton'
 import { ListAdapter } from '../../../../utils'
-import { NavDestinationHeader, RefreshList } from '../../../../component'
+import { CommentInput, NavDestinationHeader, PushAction, RefreshList } from '../../../../component'
 
 
 export interface DawdilingDetailData {
@@ -14,9 +14,13 @@ export interface DawdilingDetailData {
 
 @Component
 export struct DawdilingDetail {
+  // 动态信息
   @State @Watch("loadComment") private moyuContent: moyu.MoyuContent | undefined = undefined
+  // 内容
   @State private content: string | undefined = undefined
+  // 评论列表
   @State private comments: moyu.MoyuComment[] | undefined = undefined
+  // tab选项
   @State private tabOptions: SegmentButtonOptions = SegmentButtonOptions.tab({
     buttonPadding: 0,
     fontSize: 10,
@@ -24,13 +28,26 @@ export struct DawdilingDetail {
     buttons: [{ text: '评论' }, { text: '点赞' }] as ItemRestriction<SegmentButtonTextItem>,
     backgroundBlurStyle: BlurStyle.BACKGROUND_THICK
   })
+  // 当前选择tab
   @State private tabSelectedIndexes: number[] = [0]
-  @State private commentAdapter: ListAdapter<moyu.MoyuComment> | undefined = undefined
+  // 评论列表适配器
+  @State private commentAdapter: ListAdapter<moyu.MoyuComment> = new ListAdapter<moyu.MoyuComment>()
+  // 点赞列表适配器
   @State private thumbUpAdapter: ListAdapter<string> | undefined = undefined
+  // 是否有下一页
   @State private hasNext: boolean = false
+  // 当前页
   @State private currentPage: number = 0
+  // 评论总数
   @State private total: number = 0
+  // 是否刷新中
   @State private refreshing: boolean = false
+  // 是否显示评论输入框
+  @State private isShowCommentInput: boolean = false
+  // 当前评论对象
+  @State private currentCommentName: string = ''
+  // 当前评论提交事件
+  @State private currentCommentAction: PushAction | undefined = undefined
 
   async loadComment() {
     const commentList = await moyu.commentList(this.moyuContent?.id as string)
@@ -38,7 +55,7 @@ export struct DawdilingDetail {
     this.total = commentList.total
     this.hasNext = commentList.hasNext
     this.currentPage = commentList.currentPage
-    this.commentAdapter = new ListAdapter<moyu.MoyuComment>(this.comments as moyu.MoyuComment[])
+    this.commentAdapter.setData(this.comments as moyu.MoyuComment[])
   }
 
   async loading() {
@@ -164,16 +181,28 @@ export struct DawdilingDetail {
         })
         .layoutWeight(1)
 
-        // todo 回复动态
-        Divider()
         Row({ space: 15 }) {
-          Text("写回复")
+          Text("写评论")
             .fontColor($r('app.color.second_text'))
             .fontSize(14)
             .borderRadius(100)
-            .padding({ left: 15,right: 15,top: 10,bottom: 10})
+            .padding({ left: 15, right: 15, top: 10, bottom: 10 })
             .layoutWeight(1)
             .backgroundColor($r('app.color.list_back'))
+            .onClick(() => {
+              this.currentCommentName = this.moyuContent!.nickname
+              this.currentCommentAction = {
+                push: async (content: string) => {
+                  if (this.moyuContent) {
+                    if (await moyu.comment(this.moyuContent.id, content)) {
+                      this.isShowCommentInput = false
+                      this.refreshing = true
+                    }
+                  }
+                }
+              } as PushAction
+              this.isShowCommentInput = true
+            })
 
           Image($r('app.media.ic_public_thumbsup')).height(20).width(20)
           Image($r('app.media.ic_public_share')).height(20).width(20)
@@ -186,6 +215,10 @@ export struct DawdilingDetail {
       .width(FULL_PERCENT)
       .height(FULL_PERCENT)
       .justifyContent(FlexAlign.Start)
+      .bindSheet($$this.isShowCommentInput, this.commentInput(), {
+        height: SheetSize.FIT_CONTENT,
+        showClose: false
+      })
 
     }
     .hideTitleBar(true)
@@ -196,6 +229,16 @@ export struct DawdilingDetail {
       this.content = data.content
       this.thumbUpAdapter = new ListAdapter<string>(this.moyuContent.thumbUpList)
     })
+  }
+
+  @Builder
+  commentInput() {
+    Column() {
+      CommentInput({
+        name: this.currentCommentName,
+        pushAction: this.currentCommentAction,
+      })
+    }
   }
 
   @Builder
@@ -239,6 +282,23 @@ export struct DawdilingDetail {
       .alignItems(HorizontalAlign.Start)
     }
     .alignItems(VerticalAlign.Top)
+    .onClick(() => {
+      this.currentCommentName = item.nickname
+      this.currentCommentAction = {
+        push: async (content: string) => {
+          if (await moyu.sub_comment({
+            content,
+            momentId: this.moyuContent?.id,
+            targetUserId: item.userId,
+            commentId: item.id,
+          } as moyu.SubCommentParam)) {
+            this.isShowCommentInput = false
+            this.refreshing = true
+          }
+        }
+      } as PushAction
+      this.isShowCommentInput = true
+    })
   }
 
   @Builder
@@ -253,6 +313,24 @@ export struct DawdilingDetail {
     }
     .fontSize(12)
     .width(FULL_PERCENT)
+    .onClick(() => {
+
+      this.currentCommentName = subItem.nickname
+      this.currentCommentAction = {
+        push: async (content: string) => {
+          if (await moyu.sub_comment({
+            content,
+            momentId: this.moyuContent?.id,
+            targetUserId: subItem.userId,
+            commentId: subItem.id,
+          } as moyu.SubCommentParam)) {
+            this.isShowCommentInput = false
+            this.refreshing = true
+          }
+        }
+      } as PushAction
+      this.isShowCommentInput = true
+    })
 
   }
 
