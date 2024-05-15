@@ -7,7 +7,7 @@ import { DawdlingCard } from './DawdilingCard'
 export struct DawdlingList {
   @Prop topicInfo: moyu.TopicIndex
   @State hasNext: boolean = true
-  @State adapter: ListAdapter<moyu.MoyuContent> | null = new ListAdapter<moyu.MoyuContent>([])
+  @State adapter: ListAdapter<moyu.MoyuContent> = new ListAdapter<moyu.MoyuContent>([])
   private moyuData: ListInfo<moyu.MoyuContent> | null = null
 
   async aboutToAppear() {
@@ -17,12 +17,8 @@ export struct DawdlingList {
   async refresh() {
     this.moyuData = await moyu.listForTopicId(this.topicInfo.id, 1)
     this.hasNext = this.moyuData.hasNext
-    if (this.adapter) {
-      this.adapter.setData(this.moyuData.list)
-    }
-    else {
-      this.adapter = new ListAdapter<moyu.MoyuContent>(this.moyuData.list)
-    }
+    this.adapter.setData(this.moyuData.list)
+
   }
 
   async loading() {
@@ -37,7 +33,6 @@ export struct DawdlingList {
   }
 
   build() {
-    // todo 修改刷新逻辑
     if (this.adapter) {
       RefreshList({
         listAdapter: $adapter,

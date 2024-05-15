@@ -169,15 +169,17 @@ export struct DawdilingDetail {
         Row({ space: 15 }) {
           Text("写回复")
             .fontColor($r('app.color.second_text'))
+            .fontSize(14)
             .borderRadius(100)
-            .padding({ left: 20,right: 20,top: 10,bottom: 10})
+            .padding({ left: 15,right: 15,top: 10,bottom: 10})
             .layoutWeight(1)
             .backgroundColor($r('app.color.list_back'))
+
           Image($r('app.media.ic_public_thumbsup')).height(20).width(20)
           Image($r('app.media.ic_public_share')).height(20).width(20)
         }
         .padding(8)
-        .height(80)
+        .height(50)
 
       }
       .padding({ left: 20, right: 20 })

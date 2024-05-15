@@ -60,7 +60,7 @@ export struct RefreshList {
   @Builder
   list() {
     List({ space: this.space, scroller: this.listScroller }) {
-      // ListItem()
+      ListItem()
       // ListItem().height(this.topDistance)
       // if (this.isRefreshing) {
       //   ListItem() {
