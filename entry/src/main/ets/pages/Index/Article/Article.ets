@@ -1,5 +1,6 @@
 import { content } from '../../../api'
 import { FULL_PERCENT } from '../../../constants'
+import { ArticleList } from './Content/ArticleList'
 
 @Component
 export struct Article {
@@ -17,17 +18,9 @@ export struct Article {
       Tabs({ index: $$this.currentIndex }) {
         ForEach(this.category, (item: content.Category, index: number) => {
           TabContent() {
-            List(){
-              ListItem().height(35)
-
-              ListItem().height(56)
-            }
-            .nestedScroll({
-              scrollForward: NestedScrollMode.PARENT_FIRST,
-              scrollBackward: NestedScrollMode.SELF_FIRST
-            })
-            .width(FULL_PERCENT)
+            ArticleList({categoryInfo: item})
           }
+          .align(Alignment.TopStart)
           .tabBar(this.tabBar(item.categoryName, index))
         })
       }

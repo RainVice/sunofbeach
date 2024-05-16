@@ -24,7 +24,19 @@ export interface ListInfo<T> {
 
 }
 
-export interface SunHeader{
+@Observed
+export class ListInfoModel<T> implements ListInfo<T>{
+  list: T[] = [];
+  total: number = 0;
+  pageSize: number = 0;
+  currentPage: number = 0;
+  hasNext: boolean = false;
+  hasPre: boolean = false;
+  totalPage: number = 0;
+
+}
+
+export interface SobHeader {
 
   l_c_i?: string
   cookie?: string

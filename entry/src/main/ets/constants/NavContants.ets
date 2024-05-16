@@ -1,2 +1,3 @@
-export const Dawdiling: string = "Dawdiling"
-export const DawdilingTopicCategorize: string = "DawdilingTopic"
+export const NavDawdiling: string = "Dawdiling"
+export const NavDawdilingTopicCategorize: string = "DawdilingTopic"
+export const NavArticle: string = "Article"

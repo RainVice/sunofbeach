@@ -1,21 +1,21 @@
-import { ListInfo, moyu, user } from '../../../../api'
+import { ListInfoModel, moyu, user } from '../../../../api'
 import { DawsilingContent } from './DawdilingContent'
 import { FULL_PERCENT } from '../../../../constants'
-import { SegmentButtonOptions } from '@kit.ArkUI'
+import { router, SegmentButtonOptions } from '@kit.ArkUI'
 import { ItemRestriction, SegmentButton, SegmentButtonTextItem } from '@ohos.arkui.advanced.SegmentButton'
-import { ListAdapter } from '../../../../utils'
+import { ListAdapter, UserAuthentication } from '../../../../utils'
 import { CommentInput, NavDestinationHeader, PushAction, RefreshList } from '../../../../component'
 
 
 export interface DawdilingDetailData {
-  moyuContent: moyu.MoyuContent
+  moment: moyu.MomentModel
   content: string
 }
 
 @Component
 export struct DawdilingDetail {
   // 动态信息
-  @State @Watch("loadComment") private moyuContent: moyu.MoyuContent | undefined = undefined
+  @State @Watch("refresh") private moment: moyu.MomentModel | undefined = undefined
   // 内容
   @State private content: string | undefined = undefined
   // 评论列表
@@ -49,18 +49,24 @@ export struct DawdilingDetail {
   // 当前评论提交事件
   @State private currentCommentAction: PushAction | undefined = undefined
 
-  async loadComment() {
-    const commentList = await moyu.commentList(this.moyuContent?.id as string)
+  async refresh(){
+    // 评论
+    const commentList = await moyu.commentList(this.moment?.id as string)
     this.comments = commentList.list
     this.total = commentList.total
     this.hasNext = commentList.hasNext
     this.currentPage = commentList.currentPage
     this.commentAdapter.setData(this.comments as moyu.MoyuComment[])
+    // 动态
+    if (this.moment) {
+      this.moment = await moyu.oneMoment(this.moment?.id)
+    }
   }
+
 
   async loading() {
     if (this.hasNext) {
-      const commentList: ListInfo<moyu.MoyuComment> = await moyu.commentList(this.moyuContent?.id as string, this.currentPage + 1)
+      const commentList: ListInfoModel<moyu.MoyuComment> = await moyu.commentList(this.moment?.id as string, this.currentPage + 1)
       this.comments?.push(...commentList.list)
       this.hasNext = commentList.hasNext
       this.currentPage = commentList.currentPage
@@ -72,18 +78,18 @@ export struct DawdilingDetail {
     NavDestination() {
       Column({ space: 10 }) {
         NavDestinationHeader() {
-          if (this.moyuContent) {
-            Image(this.moyuContent?.avatar)
+          if (this.moment) {
+            Image(this.moment?.avatar)
               .width(30)
               .height(30)
               .borderRadius(100)
               .alt($r('app.media.image_error'))
               .autoResize(true)
             Column({ space: 5 }) {
-              Text(this.moyuContent?.nickname).fontWeight(FontWeight.Bold)
+              Text(this.moment?.nickname).fontWeight(FontWeight.Bold)
                 .fontSize(12)
-                .fontColor(this.moyuContent?.vip ? $r('app.color.vip') : $r('app.color.first_text'))
-              Text(this.moyuContent?.createTime)
+                .fontColor(this.moment?.vip ? $r('app.color.vip') : $r('app.color.first_text'))
+              Text(this.moment?.createTime)
                 .fontSize(10)
                 .fontColor($r('app.color.second_text'))
             }
@@ -111,14 +117,14 @@ export struct DawdilingDetail {
         Refresh({ refreshing: $$this.refreshing }) {
           Scroll() {
             Column({ space: 10 }) {
-              DawsilingContent({ moyuContent: this.moyuContent, content: this.content })
+              DawsilingContent({ moyuContent: this.moment, content: this.content })
                 .width(FULL_PERCENT)
               Divider()
                 .width(FULL_PERCENT)
               if (this.comments) {
                 Column({ space: 10 }) {
                   Row() {
-                    Text(`共 ${this.tabSelectedIndexes[0] === 0 ? this.total : this.moyuContent?.thumbUpCount} 条${this.tabSelectedIndexes[0] === 0 ? "评论" : "点赞"}`)
+                    Text(`共 ${this.tabSelectedIndexes[0] === 0 ? this.total : this.moment?.thumbUpCount} 条${this.tabSelectedIndexes[0] === 0 ? "评论" : "点赞"}`)
                       .fontSize(12)
                       .fontWeight(FontWeight.Bold)
                     Blank()
@@ -176,7 +182,7 @@ export struct DawdilingDetail {
           .scrollBar(BarState.Off)
         }
         .onRefreshing(async () => {
-          await this.loadComment()
+          await this.refresh()
           this.refreshing = false
         })
         .layoutWeight(1)
@@ -189,22 +195,37 @@ export struct DawdilingDetail {
             .padding({ left: 15, right: 15, top: 10, bottom: 10 })
             .layoutWeight(1)
             .backgroundColor($r('app.color.list_back'))
-            .onClick(() => {
-              this.currentCommentName = this.moyuContent!.nickname
-              this.currentCommentAction = {
-                push: async (content: string) => {
-                  if (this.moyuContent) {
-                    if (await moyu.comment(this.moyuContent.id, content)) {
-                      this.isShowCommentInput = false
-                      this.refreshing = true
+            .onClick(async () => {
+              if (await UserAuthentication.isLogin()) {
+                this.currentCommentName = this.moment!.nickname
+                this.currentCommentAction = {
+                  push: async (content: string) => {
+                    if (this.moment) {
+                      if (await moyu.comment(this.moment.id, content)) {
+                        this.isShowCommentInput = false
+                        this.refreshing = true
+                      }
                     }
                   }
-                }
-              } as PushAction
-              this.isShowCommentInput = true
+                } as PushAction
+                this.isShowCommentInput = true
+              } else {
+                router.pushUrl({
+                  url: 'pages/Login/Login'
+                })
+              }
             })
 
-          Image($r('app.media.ic_public_thumbsup')).height(20).width(20)
+          Image(this.moment?.hasThumbUp ? $r('app.media.ic_public_thumbsup_filled') : $r('app.media.ic_public_thumbsup'))
+            .height(20)
+            .width(20)
+            .onClick(async () => {
+              if (this.moment) {
+                if (await moyu.thumb_up(this.moment.id)) {
+                  this.moment.hasThumbUp = true
+                }
+              }
+            })
           Image($r('app.media.ic_public_share')).height(20).width(20)
         }
         .padding(8)
@@ -225,9 +246,9 @@ export struct DawdilingDetail {
     .width(FULL_PERCENT)
     .onReady((ctx: NavDestinationContext) => {
       const data: DawdilingDetailData = ctx.pathInfo.param as DawdilingDetailData
-      this.moyuContent = data.moyuContent
+      this.moment = data.moment
       this.content = data.content
-      this.thumbUpAdapter = new ListAdapter<string>(this.moyuContent.thumbUpList)
+      this.thumbUpAdapter = new ListAdapter<string>(this.moment.thumbUpList)
     })
   }
 
@@ -282,22 +303,29 @@ export struct DawdilingDetail {
       .alignItems(HorizontalAlign.Start)
     }
     .alignItems(VerticalAlign.Top)
-    .onClick(() => {
-      this.currentCommentName = item.nickname
-      this.currentCommentAction = {
-        push: async (content: string) => {
-          if (await moyu.sub_comment({
-            content,
-            momentId: this.moyuContent?.id,
-            targetUserId: item.userId,
-            commentId: item.id,
-          } as moyu.SubCommentParam)) {
-            this.isShowCommentInput = false
-            this.refreshing = true
+    .onClick(async () => {
+      if (await UserAuthentication.isLogin()) {
+        this.currentCommentName = item.nickname
+        this.currentCommentAction = {
+          push: async (content: string) => {
+            if (await moyu.sub_comment({
+              content,
+              momentId: this.moment?.id,
+              targetUserId: item.userId,
+              commentId: item.id,
+            } as moyu.SubCommentParam)) {
+              this.isShowCommentInput = false
+              this.refreshing = true
+            }
           }
-        }
-      } as PushAction
-      this.isShowCommentInput = true
+        } as PushAction
+        this.isShowCommentInput = true
+      }
+      else {
+        router.pushUrl({
+          url: 'pages/Login/Login'
+        })
+      }
     })
   }
 
@@ -313,23 +341,29 @@ export struct DawdilingDetail {
     }
     .fontSize(12)
     .width(FULL_PERCENT)
-    .onClick(() => {
-
-      this.currentCommentName = subItem.nickname
-      this.currentCommentAction = {
-        push: async (content: string) => {
-          if (await moyu.sub_comment({
-            content,
-            momentId: this.moyuContent?.id,
-            targetUserId: subItem.userId,
-            commentId: subItem.id,
-          } as moyu.SubCommentParam)) {
-            this.isShowCommentInput = false
-            this.refreshing = true
+    .onClick(async () => {
+      if (await UserAuthentication.isLogin()) {
+        this.currentCommentName = subItem.nickname
+        this.currentCommentAction = {
+          push: async (content: string) => {
+            if (await moyu.sub_comment({
+              content,
+              momentId: this.moment?.id,
+              targetUserId: subItem.userId,
+              commentId: subItem.id,
+            } as moyu.SubCommentParam)) {
+              this.isShowCommentInput = false
+              this.refreshing = true
+            }
           }
-        }
-      } as PushAction
-      this.isShowCommentInput = true
+        } as PushAction
+        this.isShowCommentInput = true
+      }
+      else {
+        router.pushUrl({
+          url: 'pages/Login/Login'
+        })
+      }
     })
 
   }

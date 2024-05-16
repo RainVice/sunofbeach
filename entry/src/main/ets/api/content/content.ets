@@ -3,8 +3,8 @@
  */
 import { Send } from '../send'
 import { http } from '@kit.NetworkKit'
-import { Category, CtContent } from './model'
-import { ListInfo, SobData } from '..'
+import { ArticleDetail, Category, CtContent, CtContentModel } from './model'
+import { ListInfoModel, SobData } from '..'
 import { resToObj } from '../util'
 
 /**
@@ -17,11 +17,20 @@ export const category = async (): Promise<Category[]> => {
 }
 
 /**
- * 获取推荐内容
+ * 获取文章内容
  * @param page 页码，从1开始
  */
-export const recommend_content = async (page: number = 1): Promise<ListInfo<CtContent>> => {
-  const res: http.HttpResponse = await Send.get(`/ct/content/home/recommend/${page}`)
-  let recommend: ListInfo<CtContent> = resToObj<SobData<ListInfo<CtContent>>>(res).data
+export const content = async (categoryId: string = '', page: number = 1): Promise<ListInfoModel<CtContentModel>> => {
+  const res: http.HttpResponse = await Send.get(`/ct/content/home/recommend${categoryId? `/${categoryId}` : ''}/${page}`)
+  let recommend: ListInfoModel<CtContentModel> = resToObj<SobData<ListInfoModel<CtContentModel>>>(res).data
   return recommend
+}
+
+/**
+ * 获取文章详情
+ */
+export const article_detail = async (articleId: string): Promise<ArticleDetail> => {
+  const res: http.HttpResponse = await Send.get(`/ct/article/detail/${articleId}`)
+  let articleDetail: ArticleDetail = resToObj<SobData<ArticleDetail>>(res).data
+  return articleDetail
 }

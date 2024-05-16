@@ -1,4 +1,4 @@
-import { ListInfo, moyu } from '../../../../api'
+import { ListInfoModel, moyu } from '../../../../api'
 import { RefreshList } from '../../../../component'
 import { ListAdapter } from '../../../../utils'
 import { DawdlingCard } from './DawdilingCard'
@@ -6,28 +6,28 @@ import { DawdlingCard } from './DawdilingCard'
 @Component
 export struct DawdlingList {
   @Prop topicInfo: moyu.TopicIndex
-  @State hasNext: boolean = true
-  @State adapter: ListAdapter<moyu.MoyuContent> = new ListAdapter<moyu.MoyuContent>([])
-  private moyuData: ListInfo<moyu.MoyuContent> | null = null
+  // @State hasNext: boolean = true
+  @State adapter: ListAdapter<moyu.MomentModel> = new ListAdapter<moyu.MomentModel>([])
+  @State moyuData: ListInfoModel<moyu.MomentModel> | null = null
 
   async aboutToAppear() {
     await this.refresh()
   }
 
   async refresh() {
-    this.moyuData = await moyu.listForTopicId(this.topicInfo.id, 1)
-    this.hasNext = this.moyuData.hasNext
+    this.moyuData = await moyu.momentForTopicId(this.topicInfo.id, 1)
+    // this.hasNext = this.moyuData.hasNext
     this.adapter.setData(this.moyuData.list)
 
   }
 
   async loading() {
     if (this.moyuData?.hasNext) {
-      const tempData: ListInfo<moyu.MoyuContent> = await moyu.listForTopicId(this.topicInfo.id, this.moyuData.currentPage + 1)
+      const tempData: ListInfoModel<moyu.MomentModel> = await moyu.momentForTopicId(this.topicInfo.id, this.moyuData.currentPage + 1)
       this.moyuData.list.push(...tempData.list)
       this.moyuData.hasNext = tempData.hasNext
       this.moyuData.currentPage = tempData.currentPage
-      this.hasNext = tempData.hasNext
+      // this.hasNext = tempData.hasNext
       this.adapter?.addData(...tempData.list)
     }
   }
@@ -37,7 +37,7 @@ export struct DawdlingList {
       RefreshList({
         listAdapter: $adapter,
         bgColor: $r('app.color.list_back'),
-        hasNext: this.hasNext,
+        hasNext: this.moyuData?.hasNext,
         topDistance: 35,
         bottomDistance: 56,
         leftDistance: 10,
@@ -55,6 +55,6 @@ export struct DawdlingList {
 
   @Builder
   listItem(item: object | string | number | boolean, index: number) {
-    DawdlingCard({ moyuContent: item as moyu.MoyuContent })
+    DawdlingCard({ moment: item as moyu.MomentModel })
   }
 }

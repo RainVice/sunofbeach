@@ -22,7 +22,7 @@ export const topicIndexs: TopicIndex[] = [
 /**
  * 摸鱼动态列表，发表动态返回值
  */
-export interface MoyuContent {
+export interface Moment {
   id: string;
   userId: string;
   nickname: string;
@@ -43,7 +43,29 @@ export interface MoyuContent {
   thumbUpList: string[];
   vip: boolean;
 }
+@Observed
+export class MomentModel implements Moment{
+  id: string = '';
+  userId: string = '';
+  nickname: string = '';
+  avatar: string = '';
+  company?: string | undefined;
+  position?: string | undefined;
+  content: string = '';
+  linkCover?: string | undefined;
+  linkTitle?: string | undefined;
+  linkUrl?: string | undefined;
+  commentCount: number = 0;
+  thumbUpCount: number = 0;
+  images: string[] = [];
+  topicName?: string | undefined;
+  topicId?: string | undefined;
+  createTime: string = '';
+  hasThumbUp: boolean = false;
+  thumbUpList: string[] = [];
+  vip: boolean = false;
 
+}
 
 /**
  * 摸鱼评论内容
@@ -96,7 +118,7 @@ export interface Datum {
 /**
  * 发表评论所需参数
  */
-export interface CommentParam{
+export interface CommentParam {
   momentId: string
   content: string
 }
@@ -104,7 +126,7 @@ export interface CommentParam{
 /**
  * 回复评论所需参数
  */
-export interface SubCommentParam{
+export interface SubCommentParam {
   content: string
   momentId: string
   targetUserId: string

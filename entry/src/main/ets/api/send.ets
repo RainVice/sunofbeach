@@ -1,5 +1,5 @@
 import { http } from '@kit.NetworkKit'
-import { SobData, SunHeader } from '.'
+import { SobData, SobHeader } from '.'
 import { resToObj } from './util'
 import { promptAction, router } from '@kit.ArkUI'
 import { UserAuthentication } from '../utils'
@@ -18,7 +18,7 @@ export class Send {
                             method: http.RequestMethod,
                             extraData: Object | undefined = undefined,
                             expectDataType: http.HttpDataType | undefined = undefined,
-                            header: SunHeader | undefined = undefined): Promise<http.HttpResponse> {
+                            header: SobHeader | undefined = undefined): Promise<http.HttpResponse> {
 
     const token: string = await UserAuthentication.getToken()
     if (token) {
@@ -67,7 +67,7 @@ export class Send {
   public static async get(url: string,
                           extraData: Object | undefined = undefined,
                           expectDataType: http.HttpDataType | undefined = undefined,
-                          header: SunHeader | undefined = undefined): Promise<http.HttpResponse> {
+                          header: SobHeader | undefined = undefined): Promise<http.HttpResponse> {
     return await Send.send(url, http.RequestMethod.GET, extraData, expectDataType, header)
   }
 
@@ -80,8 +80,21 @@ export class Send {
   public static async post(url: string,
                            extraData: Object | undefined = undefined,
                            expectDataType: http.HttpDataType | undefined = undefined,
-                           header: SunHeader | undefined = undefined): Promise<http.HttpResponse> {
+                           header: SobHeader | undefined = undefined): Promise<http.HttpResponse> {
     return await Send.send(url, http.RequestMethod.POST, extraData, expectDataType, header)
+  }
+
+  /**
+   * put请求
+   * @param url
+   * @param extraData
+   * @returns
+   */
+  public static async put(url: string,
+                           extraData: Object | undefined = undefined,
+                           expectDataType: http.HttpDataType | undefined = undefined,
+                           header: SobHeader | undefined = undefined): Promise<http.HttpResponse> {
+    return await Send.send(url, http.RequestMethod.PUT, extraData, expectDataType, header)
   }
 
   /**
@@ -95,7 +108,7 @@ export class Send {
   public static async delete(url: string,
                            extraData: Object | undefined = undefined,
                            expectDataType: http.HttpDataType | undefined = undefined,
-                           header: SunHeader | undefined = undefined): Promise<http.HttpResponse> {
+                           header: SobHeader | undefined = undefined): Promise<http.HttpResponse> {
     return await Send.send(url, http.RequestMethod.DELETE, extraData, expectDataType, header)
   }
 

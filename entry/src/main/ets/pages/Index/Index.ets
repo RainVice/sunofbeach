@@ -1,4 +1,4 @@
-import { Dawdiling, DawdilingTopicCategorize, FULL_PERCENT } from '../../constants'
+import { NavDawdiling, NavDawdilingTopicCategorize, FULL_PERCENT, NavArticle } from '../../constants'
 import { IndexItem, indexItems } from '../../view_model'
 import { Article } from './Article/Article'
 import { Header } from './component/Header'
@@ -7,6 +7,7 @@ import { DawdilingAllTopic } from './Dawdling/Content/DawdilingAllTopic'
 import { Dawdling } from './Dawdling/Dawdling'
 import { Question } from './Question/Question'
 import { User } from './User/User'
+import { ArticleDetail } from './Article/Content/ArticleDetail'
 
 @Entry
 @Component
@@ -32,11 +33,12 @@ struct Index {
                         },
                         {
                           image: $r('app.media.ic_public_add_filled'), action: () => {
+                          // todo 发表动态
                         }, description: $r('app.string.add_article')
                         },
                         {
                           image: $r('app.media.ic_public_view_grid'), action: () => {
-                          this.navPathStack.pushPath({name: DawdilingTopicCategorize})
+                          this.navPathStack.pushPath({name: NavDawdilingTopicCategorize})
                         }, description: $r('app.string.more_topics')
                         },
                       ]
@@ -93,10 +95,12 @@ struct Index {
 
   @Builder
   PageMap(name: string){
-    if (name === Dawdiling){
+    if (name === NavDawdiling){
       DawdilingDetail()
-    }else if(name === DawdilingTopicCategorize){
+    }else if(name === NavDawdilingTopicCategorize){
       DawdilingAllTopic()
+    }else if(name === NavArticle){
+      ArticleDetail()
     }
   }
 

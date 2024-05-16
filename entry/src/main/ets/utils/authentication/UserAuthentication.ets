@@ -83,6 +83,6 @@ export class UserAuthentication {
   }
 
   static async isLogin(): Promise<boolean>{
-    return !!UserAuthentication.getToken()
+    return !!await UserAuthentication.getToken()
   }
 }
