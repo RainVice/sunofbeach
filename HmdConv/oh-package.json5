@@ -1,15 +1,13 @@
 {
-  "name": "entry",
+  "name": "@rv/hmd-conv",
   "version": "1.0.0",
   "description": "Please describe the basic information.",
-  "main": "",
+  "main": "Index.ets",
   "author": "",
-  "license": "",
+  "license": "Apache-2.0",
   "dependencies": {
-    "@rv/image-preview": "^1.0.2",
     "@ohos/htmlparser2": "^1.0.0",
-    "@rv/hmd-conv": "file:../HmdConv",
-    "@hcs/biu-markdown": "^1.0.2"
+    "domhandler": "^5.0.3"
   },
   "devDependencies": {},
   "dynamicDependencies": {}

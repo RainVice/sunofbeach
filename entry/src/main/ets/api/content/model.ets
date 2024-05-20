@@ -73,3 +73,55 @@ export interface ArticleDetail {
   isComment: string;
   state: string;
 }
+
+
+/**
+ * 评论详情
+ */
+export interface SubComment {
+  _id: string;
+  parentId: string;
+  beUid: string;
+  beNickname: string;
+  yourAvatar: string;
+  yourRole: string;
+  yourNickname: string;
+  yourUid: string;
+  content: string;
+  publishTime: string;
+  articleId: string;
+  isVip: boolean;
+}
+export interface Content {
+  _id: string;
+  articleId: string;
+  commentContent: string;
+  userId: string;
+  avatar: string;
+  nickname: string;
+  publishTime: string;
+  parentId: string;
+  role?: string;
+  isTop: string;
+  isVip: boolean;
+  subComments: SubComment[];
+}
+export interface Order {
+  direction: string;
+  property: string;
+  ignoreCase: boolean;
+  nullHandling: string;
+}
+export interface Sort {
+  orders: Order[];
+}
+export interface Pageable {
+  sort: Sort;
+  page: number;
+  size: number;
+}
+export interface Comment {
+  total: number;
+  content: Content[];
+  pageable: Pageable;
+}
