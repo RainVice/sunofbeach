@@ -38,7 +38,7 @@ struct Index {
                         },
                         {
                           image: $r('app.media.ic_public_view_grid'), action: () => {
-                          this.navPathStack.pushPath({name: NavDawdilingTopicCategorize})
+                          this.navPathStack.pushPath({ name: NavDawdilingTopicCategorize })
                         }, description: $r('app.string.more_topics')
                         },
                       ]
@@ -65,6 +65,18 @@ struct Index {
                     Article()
                   }
                   else if (index === 2) {
+                    Header({
+                      menuItem: [
+                        {
+                          image: $r('app.media.ic_public_community_messages'), action: () => {
+                        }, description: "消息"
+                        },
+                        {
+                          image: $r('app.media.ic_public_add_filled'), action: () => {
+                        }, description: "提问"
+                        },
+                      ]
+                    })
                     Question()
                   }
                   else if (index === 3) {
@@ -94,12 +106,12 @@ struct Index {
   }
 
   @Builder
-  PageMap(name: string){
-    if (name === NavDawdiling){
+  PageMap(name: string) {
+    if (name === NavDawdiling) {
       DawdilingDetail()
-    }else if(name === NavDawdilingTopicCategorize){
+    } else if (name === NavDawdilingTopicCategorize) {
       DawdilingAllTopic()
-    }else if(name === NavArticle){
+    } else if (name === NavArticle) {
       ArticleDetail()
     }
   }

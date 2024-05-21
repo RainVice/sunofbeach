@@ -4,6 +4,8 @@ export * as content from './content'
 
 export * as moyu from './moyu'
 
+export * as wenda from './wenda'
+
 
 export interface SobData<T> {
   success: boolean;
@@ -25,7 +27,7 @@ export interface ListInfo<T> {
 }
 
 @Observed
-export class ListInfoModel<T> implements ListInfo<T>{
+export class ListInfoModel<T> implements ListInfo<T> {
   list: T[] = [];
   total: number = 0;
   pageSize: number = 0;
@@ -33,7 +35,6 @@ export class ListInfoModel<T> implements ListInfo<T>{
   hasNext: boolean = false;
   hasPre: boolean = false;
   totalPage: number = 0;
-
 }
 
 export interface SobHeader {

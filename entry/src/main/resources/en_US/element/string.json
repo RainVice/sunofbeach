@@ -115,6 +115,22 @@
     {
       "name": "thumb_up",
       "value": "thumb up"
+    },
+    {
+      "name": "lastest",
+      "value": "lastest"
+    },
+    {
+      "name": "waiting",
+      "value": "waiting"
+    },
+    {
+      "name": "noanswer",
+      "value": "noanswer"
+    },
+    {
+      "name": "hot",
+      "value": "hot"
     }
   ]
 }

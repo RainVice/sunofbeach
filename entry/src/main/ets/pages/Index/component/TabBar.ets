@@ -3,7 +3,7 @@ import { FULL_PERCENT } from '../../../constants'
 @Component
 export struct TabBar {
   @Prop currentIndex:number = 0
-  name: string = ""
+  name: ResourceStr = ""
   index: number = 0
 
   build() {

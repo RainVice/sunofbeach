@@ -115,6 +115,22 @@
     {
       "name": "thumb_up",
       "value": "点赞"
+    },
+    {
+      "name": "lastest",
+      "value": "最新"
+    },
+    {
+      "name": "waiting",
+      "value": "等待"
+    },
+    {
+      "name": "noanswer",
+      "value": "未回答"
+    },
+    {
+      "name": "hot",
+      "value": "热门"
     }
   ]
 }
