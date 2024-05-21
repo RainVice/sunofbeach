@@ -31,10 +31,10 @@ export struct DawdlingCard {
               .fontColor(this.moment?.vip ? $r('app.color.vip') : $r('app.color.second_text'))
               .fontSize(14)
             Row({ space: 8 }) {
-              Text(this.moment?.position ? this.moment?.position : "游民")
+              Text(this.moment?.position ? this.moment?.position : $r('app.string.vagrant'))
                 .fontSize(10)
                 .fontColor($r('app.color.third_text'))
-              Text(this.moment?.company ? this.moment?.company : "无业")
+              Text(this.moment?.company ? this.moment?.company : $r('app.string.unemployed'))
                 .fontSize(10)
                 .fontColor($r('app.color.third_text'))
               Text(this.moment?.createTime)
@@ -78,7 +78,7 @@ export struct DawdlingCard {
 
           Row({ space: 5 }) {
             Image($r('app.media.ic_public_share')).width(15).height(15)
-            Text("分享")
+            Text($r('app.string.share'))
               .fontSize(13)
           }
           .layoutWeight(1)

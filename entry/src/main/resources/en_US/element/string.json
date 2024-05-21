@@ -87,6 +87,34 @@
     {
       "name": "register",
       "value": "Register"
+    },
+    {
+      "name": "x_comments",
+      "value": "comment"
+    },
+    {
+      "name": "write_comments",
+      "value": "write comments"
+    },
+    {
+      "name": "reply",
+      "value": "reply"
+    },
+    {
+      "name": "share",
+      "value": "share"
+    },
+    {
+      "name": "vagrant",
+      "value": "vagrant"
+    },
+    {
+      "name": "unemployed",
+      "value": "unemployed"
+    },
+    {
+      "name": "thumb_up",
+      "value": "thumb up"
     }
   ]
 }

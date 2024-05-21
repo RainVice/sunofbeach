@@ -188,7 +188,7 @@ export struct DawdilingDetail {
         .layoutWeight(1)
 
         Row({ space: 15 }) {
-          Text("写评论")
+          Text($r('app.string.write_comments'))
             .fontColor($r('app.color.second_text'))
             .fontSize(14)
             .borderRadius(100)
@@ -397,10 +397,10 @@ struct ThumbUpItem {
         Text(this.userInfo?.nickname).fontWeight(FontWeight.Bold)
           .fontColor(this.userInfo?.vip ? $r('app.color.vip') : $r('app.color.second_text'))
           .fontSize(12)
-        Text(this.userInfo?.position ? this.userInfo?.position : "游民")
+        Text(this.userInfo?.position ? this.userInfo?.position : $r('app.string.vagrant'))
           .fontSize(10)
           .fontColor($r('app.color.third_text'))
-        Text(this.userInfo?.company ? this.userInfo?.company : "无业")
+        Text(this.userInfo?.company ? this.userInfo?.company : $r('app.string.unemployed'))
           .fontSize(10)
           .fontColor($r('app.color.third_text'))
       }

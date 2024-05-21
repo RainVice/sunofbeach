@@ -125,3 +125,24 @@ export interface Comment {
   content: Content[];
   pageable: Pageable;
 }
+
+
+/**
+ * 评论文章参数
+ */
+export interface CommentParam {
+  parentId: string
+  articleId: string
+  commentContent: string
+}
+
+/**
+ * 回复子评论参数
+ */
+export interface SubCommentParam {
+  articleId: string;
+  parentId: string;
+  beUid: string;
+  beNickname: string;
+  content: string;
+}

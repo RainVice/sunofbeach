@@ -3,7 +3,7 @@
  */
 import { Send } from '../send'
 import { http } from '@kit.NetworkKit'
-import { ArticleDetail, Category, Comment, CtContent, CtContentModel } from './model'
+import { ArticleDetail, Category, Comment, CommentParam, CtContent, CtContentModel, SubCommentParam } from './model'
 import { ListInfoModel, SobData } from '..'
 import { resToObj } from '../util'
 
@@ -21,7 +21,7 @@ export const category = async (): Promise<Category[]> => {
  * @param page 页码，从1开始
  */
 export const content = async (categoryId: string = '', page: number = 1): Promise<ListInfoModel<CtContentModel>> => {
-  const res: http.HttpResponse = await Send.get(`/ct/content/home/recommend${categoryId? `/${categoryId}` : ''}/${page}`)
+  const res: http.HttpResponse = await Send.get(`/ct/content/home/recommend${categoryId ? `/${categoryId}` : ''}/${page}`)
   let recommend: ListInfoModel<CtContentModel> = resToObj<SobData<ListInfoModel<CtContentModel>>>(res).data
   return recommend
 }
@@ -46,3 +46,43 @@ export const article_comment = async (articleId: string, page: number): Promise<
   let comment: Comment = resToObj<SobData<Comment>>(res).data
   return comment
 }
+
+
+/**
+ * 评论文章
+ * parentId，默认为0即可
+ * articlId，文章的ID
+ * commentConetnt，评论内容
+ */
+export const comment = async (articleId: string, commentContent: string): Promise<boolean> => {
+  const res: http.HttpResponse = await Send.post('/ct/article/comment', {
+    parentId: "0",
+    articleId,
+    commentContent
+  } as CommentParam)
+  let result: SobData<null> = resToObj<SobData<null>>(res)
+  return result.success
+}
+
+
+/**
+ * 回复文章评论
+ * articleId，文章Id
+ * parentId，被回复评论的Id
+ * beUid，被评论用户的Id
+ * beNickname，被评论用户的昵称
+ * content,评论内容
+ */
+export const sub_comment = async (articleId: string, parentId: string, beUid: string, beNickname: string, content: string): Promise<boolean> => {
+  const res: http.HttpResponse = await Send.post('/ct/article/sub-comment', {
+    articleId,
+    parentId,
+    beUid,
+    beNickname,
+    content
+  } as SubCommentParam)
+  let result: SobData<null> = resToObj<SobData<null>>(res)
+  return result.success
+}
+
+
