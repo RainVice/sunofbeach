@@ -1,5 +1,5 @@
 import { content } from '../../../../api'
-import { CommentInput, NavDestinationHeader, PushAction, RefreshList } from '../../../../component'
+import { CommentInput, MdPreview, NavDestinationHeader, PushAction, RefreshList } from '../../../../component'
 import { FULL_PERCENT } from '../../../../constants'
 import { ListAdapter, UserAuthentication } from '../../../../utils'
 import { router } from '@kit.ArkUI'
@@ -19,7 +19,6 @@ export struct ArticleDetail {
   // 当前评论提交事件
   @State private currentCommentAction: PushAction | undefined = undefined
   scroll: Scroller = new Scroller()
-  controller: WebviewController = new webview.WebviewController()
 
   async loadContent() {
     this.currentPage = 1
@@ -96,22 +95,8 @@ export struct ArticleDetail {
               //   .borderRadius(5)
               // BiuMarkdown({ content: new HmdConv().html2md(this.articleDetail?.content) })
 
-              // todo 提取文章显示
               if (this.articleDetail){
-                Web({
-                  controller: this.controller,
-                  src: $rawfile("markdown-preview.html"),
-                })
-                  .onPageEnd(() => {
-                    this.controller.runJavaScript(`addContent("${this.articleDetail?.content}")`)
-                  })
-                  .nestedScroll({
-                    scrollForward: NestedScrollMode.SELF_FIRST,
-                    scrollBackward: NestedScrollMode.PARENT_FIRST
-                  })
-                  .height("100%")
-
-
+                MdPreview({content: this.articleDetail.content})
               }
 
 

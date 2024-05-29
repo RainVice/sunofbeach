@@ -34,6 +34,8 @@ export LC_ALL=en_US.UTF-8</code></pre>
     function addContent(content){
         var markdownBody = document.querySelector('.markdown-body');
         markdownBody.innerHTML = content;
+        MdPreviewEX.setHeight(document.body.scrollHeight)
+        console.log(document.body.scrollHeight)
     }
 </script>
 </body>

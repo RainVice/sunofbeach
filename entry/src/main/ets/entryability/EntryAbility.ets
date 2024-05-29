@@ -1,9 +1,11 @@
 import { AbilityConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { window } from '@kit.ArkUI';
 import { UserAuthentication } from '../utils';
+import { webview } from '@kit.ArkWeb';
 
 export default class EntryAbility extends UIAbility {
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
+    webview.WebviewController.initializeWebEngine()
   }
 
   onDestroy(): void {
