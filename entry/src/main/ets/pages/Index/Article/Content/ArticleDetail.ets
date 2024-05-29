@@ -3,7 +3,6 @@ import { CommentInput, MdPreview, NavDestinationHeader, PushAction, RefreshList 
 import { FULL_PERCENT } from '../../../../constants'
 import { ListAdapter, UserAuthentication } from '../../../../utils'
 import { router } from '@kit.ArkUI'
-import { webview } from '@kit.ArkWeb'
 
 @Component
 export struct ArticleDetail {
@@ -91,9 +90,8 @@ export struct ArticleDetail {
         Refresh({ refreshing: $$this.refreshing }) {
           Scroll(this.scroll) {
             Column({ space: 10 }) {
-              // Image(this.articleDetail?.covers[0]).width(FULL_PERCENT).height(150)
-              //   .borderRadius(5)
-              // BiuMarkdown({ content: new HmdConv().html2md(this.articleDetail?.content) })
+              Image(this.articleDetail?.covers[0]).width(FULL_PERCENT).height(150)
+                .borderRadius(5)
 
               if (this.articleDetail){
                 MdPreview({content: this.articleDetail.content})

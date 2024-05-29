@@ -5,7 +5,7 @@ import { webview } from '@kit.ArkWeb';
 
 export default class EntryAbility extends UIAbility {
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
-    webview.WebviewController.initializeWebEngine()
+    // webview.WebviewController.initializeWebEngine()
   }
 
   onDestroy(): void {

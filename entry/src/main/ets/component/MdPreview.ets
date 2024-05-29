@@ -2,39 +2,41 @@ import { webview } from '@kit.ArkWeb'
 
 @Component
 export struct MdPreview {
-
   @Require @Prop content: string
+  @State webHeight: Length = "100%"
   controller: WebviewController = new webview.WebviewController()
-  mdPreviewEX: MdPreviewEX = new MdPreviewEX()
+
 
   build() {
-    Column(){
+    Column() {
       Web({
         controller: this.controller,
         src: $rawfile("markdown-preview.html"),
       })
-        .onConsole((event) => {
-          // todo 获取高度
-          return true
+        .hitTestBehavior(HitTestMode.None)
+        .javaScriptProxy({
+          object: this,
+          name: "MdPreviewEX",
+          methodList: ["setHeight"],
+          controller: this.controller
         })
-        .javaScriptAccess(true)
+        .domStorageAccess(true)
         .onPageEnd(async () => {
-          this.controller.registerJavaScriptProxy(this.mdPreviewEX,"MdPreviewEX",["setHeight"])
-          this.controller.refresh()
-          await this.controller.runJavaScript(`addContent("${this.content}")`)
+          await this.controller.runJavaScript(`addContent(\`${this.content}\`)`)
         })
         .nestedScroll({
-          scrollForward: NestedScrollMode.SELF_FIRST,
+          scrollForward: NestedScrollMode.PARENT_FIRST,
           scrollBackward: NestedScrollMode.PARENT_FIRST
         })
-        .height("100%")
+        .height(this.webHeight)
         .verticalScrollBarAccess(false)
     }
   }
-}
 
-class MdPreviewEX{
-  setHeight(height:number){
-    return
+  setHeight(height: number) {
+    if (this.webHeight !== height) {
+      this.webHeight = height
+      this.controller.refresh()
+    }
   }
 }

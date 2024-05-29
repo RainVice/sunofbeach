@@ -9,7 +9,6 @@
     "@rv/image-preview": "^1.0.2",
     "@ohos/htmlparser2": "^1.0.0",
     "@rv/hmd-conv": "^1.0.0",
-    "@hcs/biu-markdown": "^1.0.2"
   },
   "devDependencies": {},
   "dynamicDependencies": {}
