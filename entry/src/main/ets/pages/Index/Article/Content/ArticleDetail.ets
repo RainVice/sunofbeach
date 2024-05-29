@@ -1,10 +1,9 @@
 import { content } from '../../../../api'
 import { CommentInput, NavDestinationHeader, PushAction, RefreshList } from '../../../../component'
 import { FULL_PERCENT } from '../../../../constants'
-import { BiuMarkdown } from '@hcs/biu-markdown'
-import { HmdConv } from '@rv/hmd-conv'
 import { ListAdapter, UserAuthentication } from '../../../../utils'
 import { router } from '@kit.ArkUI'
+import { webview } from '@kit.ArkWeb'
 
 @Component
 export struct ArticleDetail {
@@ -20,6 +19,7 @@ export struct ArticleDetail {
   // 当前评论提交事件
   @State private currentCommentAction: PushAction | undefined = undefined
   scroll: Scroller = new Scroller()
+  controller: WebviewController = new webview.WebviewController()
 
   async loadContent() {
     this.currentPage = 1
@@ -92,9 +92,28 @@ export struct ArticleDetail {
         Refresh({ refreshing: $$this.refreshing }) {
           Scroll(this.scroll) {
             Column({ space: 10 }) {
-              Image(this.articleDetail?.covers[0]).width(FULL_PERCENT).height(150)
-                .borderRadius(5)
-              BiuMarkdown({ content: new HmdConv().html2md(this.articleDetail?.content) })
+              // Image(this.articleDetail?.covers[0]).width(FULL_PERCENT).height(150)
+              //   .borderRadius(5)
+              // BiuMarkdown({ content: new HmdConv().html2md(this.articleDetail?.content) })
+
+              // todo 提取文章显示
+              if (this.articleDetail){
+                Web({
+                  controller: this.controller,
+                  src: $rawfile("markdown-preview.html"),
+                })
+                  .onPageEnd(() => {
+                    this.controller.runJavaScript(`addContent("${this.articleDetail?.content}")`)
+                  })
+                  .nestedScroll({
+                    scrollForward: NestedScrollMode.SELF_FIRST,
+                    scrollBackward: NestedScrollMode.PARENT_FIRST
+                  })
+                  .height("100%")
+
+
+              }
+
 
               Flex() {
                 ForEach(this.articleDetail?.labels, (item: string, index: number) => {

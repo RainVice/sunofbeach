@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://cdn.bootcdn.net/ajax/libs/github-markdown-css/5.5.1/github-markdown-light.min.css"
+          rel="stylesheet">
+</head>
+<body>
+<article class="markdown-body">
+    <div>
+        <h2>背景</h2>
+        <p>
+            今天看到一个新闻Git高危漏洞，发现我的设备上面Git版本太低了，就升级到最新版了。当终端使用Git的时候输出信息变了中文提示，不习惯。</p>
+        <h3>macOS升级Git</h3>
+        <pre><code class="language-sh"># brew升级
+brew install git
+# 重新连接
+brew link git --overwrite
+# 重启终端，查看版本
+git --version</code></pre>
+        <h3>切换英文提示</h3>
+        <p>在根目录下，编译.bash_profile文件</p>
+        <pre><code class="language-sh">code .bash_profile
+# 增进配置
+export LC_ALL=en_US.UTF-8</code></pre>
+        <p>保存，退出</p>
+        <pre><code class="language-sh">source .bash_profile</code></pre>
+    </div>
+</article>
+<script>
+    function addContent(content){
+        var markdownBody = document.querySelector('.markdown-body');
+        markdownBody.innerHTML = content;
+    }
+</script>
+</body>
+</html>

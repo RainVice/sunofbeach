@@ -29,6 +29,13 @@ export struct QuestionCard {
           .height(30)
           .alignItems(HorizontalAlign.Start)
           .justifyContent(FlexAlign.Center)
+
+          Blank()
+          if (this.content.isResolve === "1") {
+            Text("已解决").fontSize(13).fontColor($r('app.color.auxiliary')).fontWeight(FontWeight.Bold)
+          }else{
+            Text("未解决").fontSize(13).fontColor($r('app.color.second_text')).fontWeight(FontWeight.Bold)
+          }
         }
         .justifyContent(FlexAlign.Start)
         .width(FULL_PERCENT)
