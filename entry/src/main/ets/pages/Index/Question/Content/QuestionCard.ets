@@ -1,5 +1,5 @@
 import { wenda } from '../../../../api'
-import { FULL_PERCENT } from '../../../../constants'
+import { FULL_PERCENT, NavQuestion } from '../../../../constants'
 
 @Component
 export struct QuestionCard {
@@ -33,7 +33,7 @@ export struct QuestionCard {
           Blank()
           if (this.content.isResolve === "1") {
             Text("已解决").fontSize(13).fontColor($r('app.color.auxiliary')).fontWeight(FontWeight.Bold)
-          }else{
+          } else {
             Text("未解决").fontSize(13).fontColor($r('app.color.second_text')).fontWeight(FontWeight.Bold)
           }
         }
@@ -92,7 +92,10 @@ export struct QuestionCard {
       .backgroundColor(Color.White)
       .padding(10)
       .onClick(() => {
-        // todo 跳转到问答详情
+        this.navPathStack.replacePath({
+          name: NavQuestion,
+          param: this.content
+        })
       })
 
     }

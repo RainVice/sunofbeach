@@ -83,6 +83,7 @@ export struct ArticleDetail {
           .gesture(
             TapGesture({ count: 2, fingers: 1 }).onAction(() => {
               this.scroll.scrollEdge(Edge.Top)
+              this.refreshing = true
             })
           )
         }
@@ -90,11 +91,11 @@ export struct ArticleDetail {
         Refresh({ refreshing: $$this.refreshing }) {
           Scroll(this.scroll) {
             Column({ space: 10 }) {
-              Image(this.articleDetail?.covers[0]).width(FULL_PERCENT).height(150)
-                .borderRadius(5)
+              // Image(this.articleDetail?.covers[0]).width(FULL_PERCENT).height(150)
+              //   .borderRadius(5)
 
-              if (this.articleDetail){
-                MdPreview({content: this.articleDetail.content})
+              if (this.articleDetail) {
+                MdPreview({ refreshing: $refreshing, content: this.articleDetail.content })
               }
 
 
@@ -148,7 +149,8 @@ export struct ArticleDetail {
           .width(FULL_PERCENT)
           .layoutWeight(1)
           .scrollBar(BarState.Off)
-        }.layoutWeight(1)
+        }
+        .layoutWeight(1)
         .onRefreshing(async () => {
           await this.loadContent()
           this.refreshing = false

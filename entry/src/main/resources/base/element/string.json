@@ -131,6 +131,10 @@
     {
       "name": "hot",
       "value": "热门"
+    },
+    {
+      "name": "resolve",
+      "value": "【已解决】"
     }
   ]
 }

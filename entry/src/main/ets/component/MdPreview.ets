@@ -3,74 +3,38 @@ import { webview } from '@kit.ArkWeb'
 @Component
 export struct MdPreview {
   @Require @Prop content: string
-  @State webHeight: Length = 100
+  @Link @Watch("refresh") refreshing: boolean
   controller: WebviewController = new webview.WebviewController()
 
 
-  build() {
-    Column() {
-      if (this.webHeight === 100) {
-        Web({
-          controller: this.controller,
-          src: $rawfile("markdown-preview.html"),
-        })
-          .hitTestBehavior(HitTestMode.None)
-          .javaScriptProxy({
-            object: this,
-            name: "MdPreviewEX",
-            methodList: ["setHeight"],
-            controller: this.controller
-          })
-          .domStorageAccess(true)
-          .onPageEnd(async () => {
-            await this.controller.runJavaScript(`addContent(\`${
-            this.content.replace(/\$/g, '\\$')
-              .replace(/{/g, '\\{')
-              .replace(/}/g, '\\}')
-              .replace(/`/g, '\\`')
-            }\`)`)
-          })
-          .nestedScroll({
-            scrollForward: NestedScrollMode.PARENT_FIRST,
-            scrollBackward: NestedScrollMode.PARENT_FIRST
-          })
-          .height(this.webHeight)
-          .verticalScrollBarAccess(false)
-      }
-      else{
-        Web({
-          controller: this.controller,
-          src: $rawfile("markdown-preview.html"),
-        })
-          .hitTestBehavior(HitTestMode.None)
-          .javaScriptProxy({
-            object: this,
-            name: "MdPreviewEX",
-            methodList: ["setHeight"],
-            controller: this.controller
-          })
-          .domStorageAccess(true)
-          .onPageEnd(async () => {
-            await this.controller.runJavaScript(`addContent(\`${
-            this.content.replace(/\$/g, '\\$')
-              .replace(/{/g, '\\{')
-              .replace(/}/g, '\\}')
-              .replace(/`/g, '\\`')
-            }\`)`)
-          })
-          .nestedScroll({
-            scrollForward: NestedScrollMode.PARENT_FIRST,
-            scrollBackward: NestedScrollMode.PARENT_FIRST
-          })
-          .height(this.webHeight)
-          .verticalScrollBarAccess(false)
-      }
+  refresh(){
+    if (this.refreshing) {
+      this.controller.scrollTo(0,0)
     }
   }
 
-  setHeight(height: number) {
-    if (this.webHeight !== height + 20) {
-      this.webHeight = height + 20
+  build() {
+    Column() {
+      Web({
+        controller: this.controller,
+        src: $rawfile("markdown-preview.html"),
+      })
+        .onPageEnd(async () => {
+          await this.controller.runJavaScript(`addContent(\`${
+          this.content.replace(/\$/g, '\\$')
+            .replace(/{/g, '\\{')
+            .replace(/}/g, '\\}')
+            .replace(/`/g, '\\`')
+          }\`)`)
+        })
+        .nestedScroll({
+          scrollForward: NestedScrollMode.SELF_FIRST,
+          scrollBackward: NestedScrollMode.PARENT_FIRST
+        })
+        .height("100%")
+        .verticalScrollBarAccess(false)
+
     }
   }
+
 }

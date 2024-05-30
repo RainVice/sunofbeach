@@ -131,6 +131,10 @@
     {
       "name": "hot",
       "value": "hot"
+    },
+    {
+      "name": "resolve",
+      "value": "Resolve"
     }
   ]
 }

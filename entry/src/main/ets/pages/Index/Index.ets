@@ -1,4 +1,4 @@
-import { NavDawdiling, NavDawdilingTopicCategorize, FULL_PERCENT, NavArticle } from '../../constants'
+import { NavDawdiling, NavDawdilingTopicCategorize, FULL_PERCENT, NavArticle, NavQuestion } from '../../constants'
 import { IndexItem, indexItems } from '../../view_model'
 import { Article } from './Article/Article'
 import { Header } from './component/Header'
@@ -8,6 +8,7 @@ import { Dawdling } from './Dawdling/Dawdling'
 import { Question } from './Question/Question'
 import { User } from './User/User'
 import { ArticleDetail } from './Article/Content/ArticleDetail'
+import { QuestionDetail } from './Question/Content/QuestionDetail'
 
 @Entry
 @Component
@@ -113,6 +114,8 @@ struct Index {
       DawdilingAllTopic()
     } else if (name === NavArticle) {
       ArticleDetail()
+    } else if (name === NavQuestion){
+      QuestionDetail()
     }
   }
 
