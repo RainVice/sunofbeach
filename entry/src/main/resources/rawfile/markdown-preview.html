@@ -15,7 +15,32 @@
     function addContent(content){
         var markdownBody = document.querySelector('.markdown-body');
         markdownBody.innerHTML = content;
-        MdPreviewEX.setHeight(document.body.scrollHeight)
+
+        // 监听图片加载事件
+        var images = markdownBody.querySelectorAll('img');
+        var imagesLoaded = 0;
+
+        function checkImagesLoaded() {
+            imagesLoaded++;
+            if (imagesLoaded === images.length) {
+                 document.body.style.height = document.body.scrollHeight + 'px';
+                 MdPreviewEX.setHeight(document.body.scrollHeight)
+            }
+        }
+
+        if (images.length === 0) {
+             document.body.style.height = document.body.scrollHeight + 'px';
+             MdPreviewEX.setHeight(document.body.scrollHeight)
+        } else {
+            images.forEach(function(image) {
+                if (image.complete) {
+                    checkImagesLoaded();
+                } else {
+                    image.addEventListener('load', checkImagesLoaded);
+                    image.addEventListener('error', checkImagesLoaded);
+                }
+            });
+        }
     }
 </script>
 </body>
