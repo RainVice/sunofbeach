@@ -1,5 +1,5 @@
 import { content } from '../../../../api'
-import { CommentInput, MdPreview, NavDestinationHeader, PushAction, RefreshList } from '../../../../component'
+import { CommentInput, MdPreview, NavDestinationHeader, PushAction, RefreshList, RichHtml } from '../../../../component'
 import { FULL_PERCENT } from '../../../../constants'
 import { ListAdapter, UserAuthentication } from '../../../../utils'
 import { router } from '@kit.ArkUI'
@@ -91,13 +91,14 @@ export struct ArticleDetail {
         Refresh({ refreshing: $$this.refreshing }) {
           Scroll(this.scroll) {
             Column({ space: 10 }) {
-              // Image(this.articleDetail?.covers[0]).width(FULL_PERCENT).height(150)
-              //   .borderRadius(5)
+              Image(this.articleDetail?.covers[0]).width(FULL_PERCENT).height(150)
+                .borderRadius(5)
 
               if (this.articleDetail) {
-                MdPreview({ refreshing: $refreshing, content: this.articleDetail.content })
+                // MdPreview({ refreshing: $refreshing, content: this.articleDetail.content })
+                RichHtml({content: this.articleDetail.content })
+                // HPRichText({richTextOption: this.richTextOption})
               }
-
 
               Flex() {
                 ForEach(this.articleDetail?.labels, (item: string, index: number) => {
@@ -155,7 +156,6 @@ export struct ArticleDetail {
           await this.loadContent()
           this.refreshing = false
         })
-        .layoutWeight(1)
 
         if (this.articleDetail) {
           Row({ space: 15 }) {

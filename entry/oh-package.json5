@@ -9,7 +9,8 @@
     "@rv/image-preview": "^1.0.2",
     "@ohos/htmlparser2": "^1.0.0",
     "@rv/hmd-conv": "^1.0.0",
-    "@ohasasugar/hp-richtext": "^1.0.6"
+    "@ohasasugar/hp-richtext": "^1.0.6",
+    "domhandler": "^5.0.3",
   },
   "devDependencies": {},
   "dynamicDependencies": {}
