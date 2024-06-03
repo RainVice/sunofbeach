@@ -1,6 +1,6 @@
 import { moyu } from '../../../../api'
 import { NavDawdiling, FULL_PERCENT } from '../../../../constants'
-import { createDocumentStream, Document, DomUtils } from '@ohos/htmlparser2'
+import { createDocumentStream, Document, DomUtils, parseDocument, Parser } from '@ohos/htmlparser2'
 import { DawsilingContent } from './DawdilingContent'
 import { DawdilingDetailData } from './DawdilingDetail'
 
@@ -11,11 +11,7 @@ export struct DawdlingCard {
   @Consume navPathStack: NavPathStack
 
   aboutToAppear(): void {
-    const parser = createDocumentStream((error: Error | null, dom: Document) => {
-      this.content = DomUtils.textContent(dom)
-    })
-    parser.write(this.moment?.content as string)
-    parser.end()
+    this.content = DomUtils.textContent(parseDocument(this.moment.content))
   }
 
   build() {
@@ -23,7 +19,10 @@ export struct DawdlingCard {
       Column({ space: 10 }) {
         // 头像
         Row({ space: 10 }) {
-          Image(this.moment?.avatar).width(30).height(30).borderRadius(100)
+          Image(this.moment?.avatar)
+            .width(30)
+            .height(30)
+            .borderRadius(100)
             .autoResize(true)
             .alt($r('app.media.image_error'))
           Column({ space: 2 }) {

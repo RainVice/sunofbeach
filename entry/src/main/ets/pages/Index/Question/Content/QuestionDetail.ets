@@ -1,9 +1,9 @@
 import { wenda } from '../../../../api'
 import { NavDestinationHeader } from '../../../../component/NavDestinationHeader'
 import { FULL_PERCENT } from '../../../../constants'
-import { HPRichText, RichTextOption } from '@ohasasugar/hp-richtext';
 import { RefreshList } from '../../../../component/RefreshList';
 import { ListAdapter } from '../../../../utils';
+import { RichHtml } from '../../../../component';
 
 
 @Component
@@ -12,7 +12,6 @@ export struct QuestionDetail {
   @State wenDaDetail: wenda.WenDaDetail | null = null
   @State comment_list: wenda.WendaComment[] = []
   @State private refreshing: boolean = false
-  @State private richTextOption: RichTextOption = { content: "", baseFontSize: 14 }
   @State private listAdapter: ListAdapter<wenda.WendaComment> = new ListAdapter<wenda.WendaComment>()
   @State hasNext: boolean = true
   @State currentPage: number = 1;
@@ -21,7 +20,6 @@ export struct QuestionDetail {
     this.wenDaDetail = await wenda.wenda_detail(this.content?.id)
     this.comment_list = await wenda.comment_list(this.content?.id, 1)
     this.listAdapter.setData(this.comment_list)
-    this.richTextOption.content = this.wenDaDetail.description
   }
 
   async load(){
@@ -91,8 +89,9 @@ export struct QuestionDetail {
                       .fontWeight(FontWeight.Bold)
                       .width(FULL_PERCENT)
 
-                    HPRichText({ richTextOption: $richTextOption })
-                      .width(FULL_PERCENT)
+                    // HPRichText({ richTextOption: $richTextOption })
+                    //   .width(FULL_PERCENT)
+                    RichHtml({content: this.wenDaDetail.description})
                   }
                   .width(FULL_PERCENT)
                   .padding(10)
@@ -160,11 +159,7 @@ export struct QuestionDetail {
 struct CommentItem {
   @Prop comment: wenda.WendaComment
   @Prop index: number
-  @State richTextOption: RichTextOption = { content: "", baseFontSize: 14 }
 
-  aboutToAppear(): void {
-    this.richTextOption.content = this.comment.content
-  }
 
   build() {
     Column({ space: 10 }) {
@@ -182,9 +177,10 @@ struct CommentItem {
       }.width(FULL_PERCENT)
       .justifyContent(FlexAlign.Start)
 
-      HPRichText({ richTextOption: $richTextOption })
+      // HPRichText({ richTextOption: $richTextOption })
+      RichHtml({content: this.comment.content})
       Column({space: 2}) {
-        ForEach(this.comment.wendaSubComments, (item: wenda.WendaSubComment, index: number) => {
+        ForEach(this.comment.wendaSubComments, (item: wenda.WendaSubComment) => {
           this.subComment(item)
         })
       }.backgroundColor($r('app.color.list_back'))

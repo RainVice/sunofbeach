@@ -1,5 +1,10 @@
 import { content } from '../../../../api'
-import { CommentInput, MdPreview, NavDestinationHeader, PushAction, RefreshList, RichHtml } from '../../../../component'
+import {
+  CommentInput, NavDestinationHeader,
+  PushAction,
+  RefreshList,
+  RichHtml,
+} from '../../../../component'
 import { FULL_PERCENT } from '../../../../constants'
 import { ListAdapter, UserAuthentication } from '../../../../utils'
 import { router } from '@kit.ArkUI'
@@ -19,9 +24,12 @@ export struct ArticleDetail {
   @State private currentCommentAction: PushAction | undefined = undefined
   scroll: Scroller = new Scroller()
 
+  // @State richTextOption: RichTextOption = { content: '' }
+
   async loadContent() {
     this.currentPage = 1
     this.articleDetail = await content.article_detail(this.ctContent?.id as string)
+    // this.richTextOption.content = this.articleDetail.content
     const comment = await content.article_comment(this.articleDetail.id, this.currentPage)
     this.commentAdapter.setData(comment.content)
     if (comment.total > 30) {
