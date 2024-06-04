@@ -10,7 +10,7 @@ export struct HPreviewCode {
       if (hasChildren(this.node)) {
         ForEach(this.node.children, (item: ChildNode) => {
           HInline({ node: item })
-        }, (item: ChildNode) => item.toString())
+        }, (item: ChildNode, index: number) => item.toString() + index)
       }
     }
     .alignItems(HorizontalAlign.Start)

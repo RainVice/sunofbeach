@@ -1,10 +1,5 @@
 import { content } from '../../../../api'
-import {
-  CommentInput, NavDestinationHeader,
-  PushAction,
-  RefreshList,
-  RichHtml,
-} from '../../../../component'
+import { CommentInput, NavDestinationHeader, PushAction, RefreshList, RichHtml, } from '../../../../component'
 import { FULL_PERCENT } from '../../../../constants'
 import { ListAdapter, UserAuthentication } from '../../../../utils'
 import { router } from '@kit.ArkUI'
