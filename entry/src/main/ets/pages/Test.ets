@@ -18,8 +18,10 @@ struct Test {
     <h1>一级标题</h1>
 </blockquote>
 <pre><code>
-123456
+代码快
 </code></pre>
+
+<img src="https://statics.moonshot.cn/kimi-chat/static/01.0245bc9d.png">
 `;
   @State dom: Document | null = null
 

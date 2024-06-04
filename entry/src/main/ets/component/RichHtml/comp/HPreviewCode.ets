@@ -13,7 +13,9 @@ export struct HPreviewCode {
         }, (item: ChildNode) => item.toString())
       }
     }
+    .alignItems(HorizontalAlign.Start)
     .padding(10)
+    .width("100%")
     .backgroundColor("#ffdddddd")
   }
 }
