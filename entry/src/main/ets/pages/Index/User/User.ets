@@ -1,57 +1,121 @@
+import { user } from '../../../api'
 import { FULL_PERCENT } from '../../../constants'
+import { router } from '@kit.ArkUI'
 
 @Component
 export struct User {
+  @StorageProp("userInfo") userInfo: user.UserInfo | null = null
+
   build() {
-    Column(){
+    Scroll(){
+      Column() {
 
-      Row({space: 8}){
-        Image("")
-          .alt($r("app.media.fingerprint"))
-          .width(75)
-          .height(75)
-        Column({space: 3}){
-          Text("名字")
-            .fontSize(20)
-            .fontWeight(FontWeight.Bold)
-          Text("签名签名签名签名签名签名签名签名签名")
-            .maxLines(1)
-            .textOverflow({overflow: TextOverflow.Ellipsis})
-            .fontSize(14)
+        Row(){
+          Image($r("app.media.ic_public_settings"))
+            .width(30)
+            .height(30)
         }
-        .layoutWeight(1)
-        .alignItems(HorizontalAlign.Start)
+        .padding(10)
+        .width("100%")
+        .justifyContent(FlexAlign.End)
 
+        Row({ space: 10 }) {
+          Image(this.userInfo ? this.userInfo.avatar : null)
+            .alt($r("app.media.fingerprint"))
+            .width(75)
+            .height(75)
+          Column({ space: 10 }) {
+            Row({ space: 8 }) {
+              Text(this.userInfo? this.userInfo.nickname : "未登录")
+                .fontSize(20)
+                .fontWeight(FontWeight.Bold)
+              if (this.userInfo?.vip){
+                Text("vip")
+                  .fontColor(Color.White)
+                  .padding({ left: 5, right: 5, top: 2, bottom: 2 })
+                  .backgroundColor($r('app.color.vip'))
+                  .fontWeight(FontWeight.Bold)
+                  .borderRadius(5)
+              }
+            }
+            if (this.userInfo){
+              Text(this.userInfo.sign)
+                .maxLines(1)
+                .textOverflow({ overflow: TextOverflow.Ellipsis })
+                .fontSize(14)
+            }
+          }
+          .layoutWeight(1)
+          .alignItems(HorizontalAlign.Start)
+
+          Image($r('sys.media.ohos_ic_back'))
+            .width(25)
+            .height(25)
+            .rotate({
+              angle: 180
+            })
+
+        }
+        .padding(15)
+        .width(FULL_PERCENT)
+        .onClick(() => {
+          if(!this.userInfo){
+            router.pushUrl({
+              url: 'pages/Login/Login'
+            })
+          }
+          else{
+            // todo 个人信息界面
+          }
+        })
+
+        if (this.userInfo){
+          Column({ space: 30 }) {
+            Row({space: 10}){
+              Image($r("app.media.ic_public_highlight"))
+                .width(20)
+                .height(20)
+              Text("我的关注")
+            }
+            Row({space: 10}){
+              Image($r("app.media.ic_contacts_assistant"))
+                .width(20)
+                .height(20)
+              Text("我的粉丝")
+            }
+            Row({space: 10}){
+              Image($r("app.media.ic_public_community_messages"))
+                .width(20)
+                .height(20)
+              Text("消息中心")
+            }
+            Row({space: 10}){
+              Image($r("app.media.ic_public_edit"))
+                .width(20)
+                .height(20)
+              Text("我的文章")
+            }
+            Row({space: 10}){
+              Image($r("app.media.ic_public_favor"))
+                .width(20)
+                .height(20)
+              Text("我的收藏")
+            }
+
+          }
+          .alignItems(HorizontalAlign.Start)
+          .padding(15)
+          .width("100%")
+          .backgroundColor($r("app.color.start_window_background"))
+          .borderRadius(10)
+        }
 
       }
       .padding(10)
+      .backgroundColor($r('app.color.list_back'))
       .width(FULL_PERCENT)
-
-      Column({space: 10}){
-        Text("message")
-          .margin(10)
-          .fontSize(12)
-          .fontWeight(FontWeight.Bold)
-
-        Text("消息")
-        Divider()
-        Text("消息")
-        Divider()
-        Text("消息")
-        Divider()
-        Text("消息")
-        Divider()
-        Text("消息")
-        Divider()
-      }.padding(10)
-      .width("100%")
-      .backgroundColor($r("app.color.start_window_background"))
-      .borderRadius(10)
-
-
+      .height(FULL_PERCENT)
     }
-    .padding(10)
-    .backgroundColor($r('app.color.list_back'))
     .width(FULL_PERCENT)
     .height(FULL_PERCENT)
   }

@@ -24,9 +24,6 @@ export const topic = async (): Promise<TopicIndex[]> => {
  */
 export const momentForTopicId = async (topicId: string, page: number): Promise<ListInfoModel<MomentModel>> => {
   const res: http.HttpResponse = await Send.get(`/ct/moyu/list/${topicId}/${page}`)
-  if (topicId === 'follow') {
-    console.log(JSON.stringify(res));
-  }
   const moyu: ListInfoModel<MomentModel> = resToObj<SobData<ListInfoModel<MomentModel>>>(res).data
   return moyu
 }
