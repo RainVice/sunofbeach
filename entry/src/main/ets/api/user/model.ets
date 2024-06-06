@@ -48,3 +48,28 @@ export interface UserToken{
   fansCount?: number;
   followCount?: number;
 }
+
+/**
+ * 关注列表
+ */
+export interface Follow {
+  userId: string
+  nickname: string
+  sign: string
+  avatar: string
+  relative: number
+  vip: boolean
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

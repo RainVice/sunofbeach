@@ -1,16 +1,17 @@
 import { user } from '../../../api'
-import { FULL_PERCENT } from '../../../constants'
+import { NavFollow, FULL_PERCENT } from '../../../constants'
 import { router } from '@kit.ArkUI'
 
 @Component
 export struct User {
   @StorageProp("userInfo") userInfo: user.UserInfo | null = null
+  @Consume navPathStack: NavPathStack
 
   build() {
-    Scroll(){
+    Scroll() {
       Column() {
 
-        Row(){
+        Row() {
           Image($r("app.media.ic_public_settings"))
             .width(30)
             .height(30)
@@ -24,12 +25,13 @@ export struct User {
             .alt($r("app.media.fingerprint"))
             .width(75)
             .height(75)
+            .borderRadius(75)
           Column({ space: 10 }) {
             Row({ space: 8 }) {
-              Text(this.userInfo? this.userInfo.nickname : "未登录")
+              Text(this.userInfo ? this.userInfo.nickname : "未登录")
                 .fontSize(20)
                 .fontWeight(FontWeight.Bold)
-              if (this.userInfo?.vip){
+              if (this.userInfo?.vip) {
                 Text("vip")
                   .fontColor(Color.White)
                   .padding({ left: 5, right: 5, top: 2, bottom: 2 })
@@ -38,8 +40,9 @@ export struct User {
                   .borderRadius(5)
               }
             }
-            if (this.userInfo){
-              Text(this.userInfo.sign)
+
+            if (this.userInfo) {
+              Text(this.userInfo.sign || "无签名")
                 .maxLines(1)
                 .textOverflow({ overflow: TextOverflow.Ellipsis })
                 .fontSize(14)
@@ -59,48 +62,60 @@ export struct User {
         .padding(15)
         .width(FULL_PERCENT)
         .onClick(() => {
-          if(!this.userInfo){
+          if (!this.userInfo) {
             router.pushUrl({
               url: 'pages/Login/Login'
             })
           }
-          else{
+          else {
             // todo 个人信息界面
           }
         })
 
-        if (this.userInfo){
+        if (this.userInfo) {
           Column({ space: 30 }) {
-            Row({space: 10}){
+            Row({ space: 10 }) {
               Image($r("app.media.ic_public_highlight"))
                 .width(20)
                 .height(20)
               Text("我的关注")
             }
-            Row({space: 10}){
+            .width(FULL_PERCENT)
+            .onClick(() => {
+              this.navPathStack.replacePath({ name: NavFollow })
+            })
+
+            Row({ space: 10 }) {
               Image($r("app.media.ic_contacts_assistant"))
                 .width(20)
                 .height(20)
               Text("我的粉丝")
             }
-            Row({space: 10}){
+            .width(FULL_PERCENT)
+
+            Row({ space: 10 }) {
               Image($r("app.media.ic_public_community_messages"))
                 .width(20)
                 .height(20)
               Text("消息中心")
             }
-            Row({space: 10}){
+            .width(FULL_PERCENT)
+
+            Row({ space: 10 }) {
               Image($r("app.media.ic_public_edit"))
                 .width(20)
                 .height(20)
               Text("我的文章")
             }
-            Row({space: 10}){
+            .width(FULL_PERCENT)
+
+            Row({ space: 10 }) {
               Image($r("app.media.ic_public_favor"))
                 .width(20)
                 .height(20)
               Text("我的收藏")
             }
+            .width(FULL_PERCENT)
 
           }
           .alignItems(HorizontalAlign.Start)
@@ -112,7 +127,6 @@ export struct User {
 
       }
       .padding(10)
-      .backgroundColor($r('app.color.list_back'))
       .width(FULL_PERCENT)
       .height(FULL_PERCENT)
     }

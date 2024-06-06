@@ -1,4 +1,5 @@
-import { NavDawdiling, NavDawdilingTopicCategorize, FULL_PERCENT, NavArticle, NavQuestion } from '../../constants'
+import { NavDawdiling, NavDawdilingTopicCategorize, FULL_PERCENT, NavArticle, NavQuestion,
+  NavFollow } from '../../constants'
 import { IndexItem, indexItems } from '../../view_model'
 import { Article } from './Article/Article'
 import { Header } from './component/Header'
@@ -9,6 +10,7 @@ import { Question } from './Question/Question'
 import { User } from './User/User'
 import { ArticleDetail } from './Article/Content/ArticleDetail'
 import { QuestionDetail } from './Question/Content/QuestionDetail'
+import { FollowList } from './User/Content/FollowList'
 
 @Entry
 @Component
@@ -39,7 +41,7 @@ struct Index {
                         },
                         {
                           image: $r('app.media.ic_public_view_grid'), action: () => {
-                          this.navPathStack.pushPath({ name: NavDawdilingTopicCategorize })
+                          this.navPathStack.replacePath({ name: NavDawdilingTopicCategorize })
                         }, description: $r('app.string.more_topics')
                         },
                       ]
@@ -116,6 +118,8 @@ struct Index {
       ArticleDetail()
     } else if (name === NavQuestion){
       QuestionDetail()
+    }else if(name === NavFollow){
+      FollowList()
     }
   }
 

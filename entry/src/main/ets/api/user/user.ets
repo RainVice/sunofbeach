@@ -3,9 +3,9 @@
  */
 import { Send } from '../send'
 import { http } from '@kit.NetworkKit'
-import { Captcha, CaptchaParam, LoginParam, UserInfo, UserToken } from './model'
+import { Captcha, CaptchaParam, Follow, LoginParam, UserInfo, UserToken } from './model'
 import { resToObj } from '../util'
-import { SobData } from '..'
+import { ListInfo, ListInfoModel, SobData } from '..'
 import { cryptoFramework } from '@kit.CryptoArchitectureKit'
 import { buffer, util } from '@kit.ArkTS'
 import { promptAction } from '@kit.ArkUI'
@@ -77,5 +77,14 @@ export const checkToken = async (): Promise<UserToken> => {
   }
   return userToken
 }
+
+
+export const follow_list = async (userId: string, page: number): Promise<ListInfoModel<Follow>> => {
+  const res: http.HttpResponse = await Send.get(`/uc/follow/list/${userId}/${page}`)
+  const followList: ListInfoModel<Follow> = resToObj<SobData<ListInfoModel<Follow>>>(res).data
+  return followList
+}
+
+
 
 

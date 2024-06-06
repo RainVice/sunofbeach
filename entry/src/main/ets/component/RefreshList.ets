@@ -8,7 +8,7 @@ export struct RefreshList {
   bottomDistance: number = 0
   leftDistance: number = 0
   rightDistance: number = 0
-  bgColor: ResourceColor | undefined = undefined
+  bgColor: ResourceColor  = Color.Transparent
   space: number = 10
   nestedScrollOptions: NestedScrollOptions = {
     scrollForward: NestedScrollMode.PARENT_FIRST,
