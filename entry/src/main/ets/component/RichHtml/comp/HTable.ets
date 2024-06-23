@@ -1,5 +1,3 @@
-import { DomUtils } from '@ohos/htmlparser2'
-import { it } from '@ohos/hypium'
 import { ChildNode, hasChildren, isTag } from 'domhandler'
 import { HInline } from './HInline'
 

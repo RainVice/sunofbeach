@@ -1,6 +1,7 @@
 import { DomUtils, ElementType } from '@ohos/htmlparser2'
-import { ChildNode, hasChildren, isTag, isText, Text as DomText } from 'domhandler'
-import { promptAction } from '@kit.ArkUI'
+import { ChildNode, Element, hasChildren, isTag, isText, Text as DomText } from 'domhandler'
+import { promptAction, router } from '@kit.ArkUI'
+import { RouterParams } from '../../../view_model'
 
 @Component
 export struct HInline {
@@ -8,6 +9,7 @@ export struct HInline {
   fontSize: number = 16
   fontWeight: FontWeight = FontWeight.Normal
   fontStyle: FontStyle = FontStyle.Normal
+  @Consume images: string[]
 
   build() {
     if (hasChildren(this.node)) {
@@ -18,6 +20,14 @@ export struct HInline {
           }
           else if (isTag(item) && item.name === 'img') {
             ImageSpan(item.attribs["src"])
+              .onClick(() => {
+                const src: string = (this.node as Element).attribs["src"]
+                const imageIndex = this.images.findIndex((item => item === src))
+                router.pushUrl({
+                  url: 'pages/ImagePreview/ImagePreview',
+                  params: { imageUrls: this.images, imageIndex: imageIndex } as RouterParams
+                })
+              })
           }
           else if (isTag(item) && item.name === 'a') {
             Span(DomUtils.textContent(item).trim())

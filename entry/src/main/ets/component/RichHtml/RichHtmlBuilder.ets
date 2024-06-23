@@ -19,7 +19,7 @@ export struct RichHtmlBuilder {
         HInline({ node: this.node })
       }
       else if (hasChildren(this.node)) {
-        ForEach(this.node.children, (item: ChildNode, index: number) => {
+        ForEach(this.node.children, (item: ChildNode) => {
           if (isTag(item)) {
             if (item.name === 'h1') {
               HHeading({ node: item, level: 1 })

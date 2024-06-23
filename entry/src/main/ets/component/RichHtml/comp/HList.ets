@@ -1,6 +1,7 @@
+import { DomUtils } from '@ohos/htmlparser2'
 import { ChildNode, hasChildren, isTag } from 'domhandler'
 import { RichHtmlBuilder } from '../RichHtmlBuilder'
-import { HInline } from './HInline'
+import { HParagraph } from './HParagraph'
 
 @Component
 export struct HList {
@@ -17,8 +18,7 @@ export struct HList {
             }
           }, (item: ChildNode, index: number) => item.toString() + index)
         }
-      }
-      else if (isTag(this.node) && this.node.name === 'ul') {
+      } else if (isTag(this.node) && this.node.name === 'ul') {
         if (hasChildren(this.node)) {
           ForEach(this.node.children, (item: ChildNode) => {
             if (isTag(item) && item.name === 'li') {
@@ -43,7 +43,11 @@ struct OLi {
           minWidth: 20
         })
         .textAlign(TextAlign.End)
-      RichHtmlBuilder({ node: this.node })
+      if (DomUtils.getElementsByTagName('p', this.node, true).length) {
+        HParagraph({ node: DomUtils.getElementsByTagName('p', this.node, true)[0] })
+      } else {
+        RichHtmlBuilder({ node: this.node })
+      }
     }
     .alignItems(VerticalAlign.Top)
   }
@@ -56,7 +60,11 @@ struct ULi {
   build() {
     Row({ space: 5 }) {
       Text("·")
-      RichHtmlBuilder({ node: this.node })
+      if (DomUtils.getElementsByTagName('p', this.node, true).length) {
+        HParagraph({ node: DomUtils.getElementsByTagName('p', this.node, true)[0] })
+      } else {
+        RichHtmlBuilder({ node: this.node })
+      }
     }
     .justifyContent(FlexAlign.Start)
     .alignItems(VerticalAlign.Top)
