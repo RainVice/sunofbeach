@@ -1,21 +1,29 @@
 import { ChildNode, hasChildren } from 'domhandler'
+import { FULL_PERCENT } from '../../../constants'
 import { HInline } from './HInline'
 
 @Component
 export struct HPreviewCode {
-  @Require @Prop node: ChildNode
+  node: ChildNode | undefined = undefined
 
   build() {
-    Column({space: 5}) {
-      if (hasChildren(this.node)) {
-        ForEach(this.node.children, (item: ChildNode) => {
-          HInline({ node: item })
-        }, (item: ChildNode, index: number) => item.toString() + index)
+    Scroll(){
+      Column({space: 5}) {
+        if (hasChildren(this.node)) {
+          ForEach(this.node.children, (item: ChildNode) => {
+            HInline({ node: item })
+          }, (item: ChildNode, index: number) => item.toString() + index)
+        }
       }
+      .alignItems(HorizontalAlign.Start)
+      .padding(10)
     }
-    .alignItems(HorizontalAlign.Start)
-    .padding(10)
-    .width("100%")
-    .backgroundColor("#ffdddddd")
+    .backgroundColor("#f0f0f0")
+    .align(Alignment.Start)
+    .scrollBarWidth(2)
+    .width(FULL_PERCENT)
+    .scrollable(ScrollDirection.Horizontal)
   }
 }
+
+

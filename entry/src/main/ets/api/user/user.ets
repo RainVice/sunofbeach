@@ -3,7 +3,7 @@
  */
 import { Send } from '../send'
 import { http } from '@kit.NetworkKit'
-import { Captcha, CaptchaParam, Follow, LoginParam, UserInfo, UserToken } from './model'
+import { Achievement, Captcha, CaptchaParam, Follow, LoginParam, UserInfo, UserToken } from './model'
 import { resToObj } from '../util'
 import { ListInfo, ListInfoModel, SobData } from '..'
 import { cryptoFramework } from '@kit.CryptoArchitectureKit'
@@ -30,7 +30,7 @@ export const captcha = async (code: number = Math.random()): Promise<Captcha> =>
  * 获取用户信息
  * @param userId 用户ID
  */
-export const user_info = async (userId: string): Promise<UserInfo> => {
+export const user_info = async (userId: string = ""): Promise<UserInfo> => {
   const res: http.HttpResponse = await Send.get(`/uc/user-info/${userId}`)
   const userInfo: UserInfo = resToObj<SobData<UserInfo>>(res).data
   return userInfo
@@ -78,13 +78,22 @@ export const checkToken = async (): Promise<UserToken> => {
   return userToken
 }
 
-
+/**
+ * 关注列表
+ */
 export const follow_list = async (userId: string, page: number): Promise<ListInfoModel<Follow>> => {
   const res: http.HttpResponse = await Send.get(`/uc/follow/list/${userId}/${page}`)
   const followList: ListInfoModel<Follow> = resToObj<SobData<ListInfoModel<Follow>>>(res).data
   return followList
 }
 
-
+/**
+ * 获取用户成就
+ */
+export const achievement = async (uid: string = ""): Promise<Achievement>  => {
+  const res: http.HttpResponse = await Send.get(`https://api.sunofbeach.net/ast/achievement/${uid}`)
+  const achievement: Achievement = resToObj<SobData<Achievement>>(res).data
+  return achievement
+}
 
 

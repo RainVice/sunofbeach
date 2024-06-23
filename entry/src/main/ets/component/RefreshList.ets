@@ -1,6 +1,8 @@
 import { FULL_PERCENT } from '../constants'
 import { SwipeRefresher } from '@ohos.arkui.advanced.SwipeRefresher'
 import { ListAdapter } from '../utils'
+import { emptyBuilder } from '.'
+
 
 @Component
 export struct RefreshList {
@@ -17,7 +19,7 @@ export struct RefreshList {
   needRefresh: boolean = true
   @Prop hasNext: boolean
   @Link listAdapter: ListAdapter<object | string | number | boolean>
-  @BuilderParam itemView: (item: object | string | number | boolean, index: number) => void
+  @BuilderParam itemView: (item: object | string | number | boolean, index: number) => void = emptyBuilder
   /**
    * 刷新事件
    */

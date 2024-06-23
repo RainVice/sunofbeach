@@ -1,6 +1,7 @@
 import { Send } from '../send'
 import { http } from '@kit.NetworkKit'
-import { CommentParam, Datum, MoyuComment, MomentModel, SubCommentParam, TopicIndex, topicIndexs } from './model'
+import { CommentParam, Datum, MoyuComment, MomentModel, SubCommentParam, TopicIndex, topicIndexs,
+  Moment } from './model'
 import { ListInfoModel, SobData } from '..'
 import { resToObj } from '../util'
 import { promptAction } from '@kit.ArkUI'
@@ -130,4 +131,14 @@ export const oneMoment = async (momentId: string): Promise<MomentModel> => {
   return result
 }
 
+
+/**
+ * 获取摸鱼列表
+ * https://api.sunofbeach.net/ct/moyu/list/user/1153952789488054272/1
+ */
+export const moyuList_user = async (uid: string = "",page: number): Promise<Moment[]> => {
+  const res: http.HttpResponse = await Send.get(`https://api.sunofbeach.net/ct/moyu/list/user/${uid}/${page}`)
+  const result: Moment[] = resToObj<SobData<Moment[]>>(res).data
+  return result
+}
 

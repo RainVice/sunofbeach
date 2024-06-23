@@ -3,7 +3,7 @@ import { RichHtmlBuilder } from '../RichHtmlBuilder'
 
 @Component
 export struct HBlockquote {
-  @Require @Prop node: ChildNode
+  node: ChildNode | undefined = undefined
   build() {
     Column() {
       RichHtmlBuilder({node: this.node})

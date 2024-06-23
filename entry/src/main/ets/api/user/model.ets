@@ -62,7 +62,30 @@ export interface Follow {
 }
 
 
-
+export interface Achievement {
+  id: string
+  userId: string
+  articleDxView: number
+  shareDxView: number
+  articleTotal: number
+  shareTotal: number
+  wendaTotal: number
+  asCount: number
+  resolveCount: number
+  fansDx: number
+  fansCount: number
+  thumbUpDx: number
+  thumbUpTotal: number
+  followCount: number
+  momentCount: number
+  favorites: number
+  sobDx: number
+  sob: number
+  createTime: string
+  updateTime: string
+  atotalView: number
+  stotalView: number
+}
 
 
 

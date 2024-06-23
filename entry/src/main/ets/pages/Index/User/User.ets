@@ -1,10 +1,11 @@
 import { user } from '../../../api'
 import { NavFollow, FULL_PERCENT } from '../../../constants'
 import { router } from '@kit.ArkUI'
+import { RouterParams } from '../../../view_model'
 
 @Component
 export struct User {
-  @StorageProp("userInfo") userInfo: user.UserInfo | null = null
+  @StorageLink("userInfo") userInfo: user.UserInfo | null = null
   @Consume navPathStack: NavPathStack
 
   build() {
@@ -68,7 +69,12 @@ export struct User {
             })
           }
           else {
-            // todo 个人信息界面
+            if (this.userInfo) {
+              router.pushUrl({
+                url: 'pages/User/UserPage',
+                params: {uid: this.userInfo.userId} as RouterParams
+              })
+            }
           }
         })
 

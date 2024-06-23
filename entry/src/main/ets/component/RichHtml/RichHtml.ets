@@ -4,10 +4,11 @@ import { RichHtmlBuilder } from './RichHtmlBuilder'
 
 @Component
 export struct RichHtml {
-  @Require @Prop content: string
-  @State private dom: Document | null = null
+  content: string = ''
+  dom: Document | undefined = undefined
+
   aboutToAppear(): void {
-    this.dom = parseDocument(this.content)
+    this.dom = parseDocument(this.content.trim())
   }
 
   build() {

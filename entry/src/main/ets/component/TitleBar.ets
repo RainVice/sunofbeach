@@ -1,9 +1,10 @@
 import { FULL_PERCENT } from '../constants'
 import { router } from '@kit.ArkUI'
+import { emptyBuilder } from '.'
 
 @Component
 export struct TitleBar {
-  @BuilderParam builderItem: () => void
+  @BuilderParam builderItem: () => void = emptyBuilder
 
   build() {
     Row({ space: 10 }) {

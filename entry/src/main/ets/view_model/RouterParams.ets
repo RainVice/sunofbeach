@@ -5,5 +5,6 @@ export interface RouterParams{
   imageUrls?: string[]
   imageIndex?: number
   datum?: moyu.Datum
+  uid?: string
 
 }

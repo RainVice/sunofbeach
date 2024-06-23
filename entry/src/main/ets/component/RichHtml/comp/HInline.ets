@@ -4,23 +4,23 @@ import { promptAction } from '@kit.ArkUI'
 
 @Component
 export struct HInline {
-  @Require @Prop node: ChildNode
-  @Prop fontSize: number = 16
-  @Prop fontWeight: FontWeight = FontWeight.Normal
-  @Prop fontStyle: FontStyle = FontStyle.Normal
+  node: ChildNode | undefined = undefined
+  fontSize: number = 16
+  fontWeight: FontWeight = FontWeight.Normal
+  fontStyle: FontStyle = FontStyle.Normal
 
   build() {
     if (hasChildren(this.node)) {
       Text() {
-        ForEach(this.node.children, (item: ChildNode, index: number) => {
+        ForEach(this.node.children, (item: ChildNode) => {
           if (isText(item)) {
             Span(item.data.trim())
           }
-          else if (isTag(item) && item.name === 'img'){
+          else if (isTag(item) && item.name === 'img') {
             ImageSpan(item.attribs["src"])
           }
-          else if (isTag(item) && item.name === 'a'){
-            Span(DomUtils.textContent(item))
+          else if (isTag(item) && item.name === 'a') {
+            Span(DomUtils.textContent(item).trim())
               .fontColor(Color.Blue)
               .onClick(() => {
                 promptAction.showToast({
@@ -28,9 +28,10 @@ export struct HInline {
                 })
               })
           }
-          else if (isTag(item) && ( item.name === 'code' || (item.name === 'b' ||  item.name === 'strong') || (item.name === 'i' ||  item.name === 'em'))){
+          else if (isTag(item) && (item.name === 'code' || item.name === 'b' || item.name === 'strong' || item.name === 'i' || item.name === 'em')) {
+            // Span(" ")
             if (DomUtils.getElementsByTagType(ElementType.Text, item)?.length > 0) {
-              Span((DomUtils.getElementsByTagType(ElementType.Text, item)[0] as DomText).data)
+              Span((DomUtils.getElementsByTagType(ElementType.Text, item)[0] as DomText).data.trim())
                 .fontWeight(DomUtils.getElementsByTagName("b", item, true)
                   .length > 0 || DomUtils.getElementsByTagName("strong", item, true)
                   .length > 0 ? FontWeight.Bold : FontWeight.Normal)
@@ -46,14 +47,14 @@ export struct HInline {
                 })
                 .fontColor(DomUtils.getElementsByTagName("code", item, true).length > 0 ? "#ffee421e" : "#ff000000")
             }
+            // Span(" ")
           }
         }, (item: ChildNode, index: number) => item.toString() + index)
       }
       .fontSize(this.fontSize)
       .fontWeight(this.fontWeight)
       .fontStyle(this.fontStyle)
-    }
-    else if (isText(this.node) && this.node.data.trim()) {
+    } else if (isText(this.node) && this.node.data.trim()) {
       Text(this.node.data.trim())
         .fontSize(this.fontSize)
         .fontWeight(this.fontWeight)

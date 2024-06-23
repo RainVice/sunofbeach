@@ -3,6 +3,6 @@
     "pages/Index/Index",
     "pages/ImagePreview/ImagePreview",
     "pages/Login/Login",
-    "pages/Test"
+    "pages/User/UserPage"
   ]
 }

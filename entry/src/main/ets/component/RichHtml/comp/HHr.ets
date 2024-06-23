@@ -2,7 +2,7 @@ import { ChildNode } from 'domhandler'
 
 @Component
 export struct HHr {
-  @Require @Prop node: ChildNode
+  node: ChildNode | undefined = undefined
   build() {
     Divider()
   }

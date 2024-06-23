@@ -1,9 +1,10 @@
 import { ChildNode, hasChildren, isTag } from 'domhandler'
 import { RichHtmlBuilder } from '../RichHtmlBuilder'
+import { HInline } from './HInline'
 
 @Component
 export struct HList {
-  @Require @Prop node: ChildNode
+  node: ChildNode | undefined = undefined
   order: number = 1
 
   build() {
@@ -32,8 +33,8 @@ export struct HList {
 
 @Component
 struct OLi {
-  @Require @Prop node: ChildNode
-  @Require @Prop order: number
+  node: ChildNode | undefined = undefined
+  order: number | undefined = undefined
 
   build() {
     Row({ space: 5 }) {
@@ -50,13 +51,14 @@ struct OLi {
 
 @Component
 struct ULi {
-  @Require @Prop node: ChildNode
+  node: ChildNode | undefined = undefined
 
   build() {
     Row({ space: 5 }) {
       Text("·")
       RichHtmlBuilder({ node: this.node })
     }
+    .justifyContent(FlexAlign.Start)
     .alignItems(VerticalAlign.Top)
   }
 }

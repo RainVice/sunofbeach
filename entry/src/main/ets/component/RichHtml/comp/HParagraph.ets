@@ -3,7 +3,7 @@ import { HInline } from './HInline'
 
 @Component
 export struct HParagraph {
-  @Require @Prop node: ChildNode
+  node: ChildNode | undefined = undefined
   build() {
     HInline({node: this.node})
   }

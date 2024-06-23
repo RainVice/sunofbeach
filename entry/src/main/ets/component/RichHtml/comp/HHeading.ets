@@ -3,8 +3,8 @@ import { HInline } from './HInline'
 
 @Component
 export struct HHeading {
-  @Require @Prop node: ChildNode
-  @Require @Prop level: number = 1
+  node: ChildNode | undefined = undefined
+  level: number = 1
 
   build() {
     HInline({ node: this.node, fontSize: 26 - this.level * 1, fontWeight: FontWeight.Bold })
