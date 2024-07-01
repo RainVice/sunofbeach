@@ -1,4 +1,4 @@
-import { WendaComment, WenDaDetail, WenDaList } from '.'
+import { Answer, WendaComment, WenDaDetail, WenDaList } from '.'
 import { ListInfo, SobData } from '..'
 import { Send } from '../send'
 import { resToObj } from '../util'
@@ -17,7 +17,6 @@ export const wenda_list = async (page: number, state: string): Promise<ListInfo<
 }
 
 
-
 /**
  * 获取问题详情
  * @param wendaId 问答 ID
@@ -33,10 +32,20 @@ export const wenda_detail = async (wendaId: string = ""): Promise<WenDaDetail> =
  * @param wendaId参数：问题的Id
  * @param page参数：页码，从第1页开始
  */
-export const comment_list = async (wendaId: string = "",page: number = 1): Promise<WendaComment[]> => {
+export const comment_list = async (wendaId: string = "", page: number = 1): Promise<WendaComment[]> => {
   const res: http.HttpResponse = await Send.get(`/ct/wenda/comment/list/${wendaId}/${page}`)
   const saum: WendaComment[] = resToObj<SobData<WendaComment[]>>(res).data
   return saum
+}
+
+/**
+ * 获取指定用户回答列表
+ * https://api.sunofbeach.net/ct/wenda/comment/list/user/1153952789488054272/1
+ */
+export const wenda4user = async (uid: string = "", page: number): Promise<Answer> => {
+  const res: http.HttpResponse = await Send.get(`https://api.sunofbeach.net/ct/wenda/comment/list/user/${uid}/${page}`)
+  const result: Answer = resToObj<SobData<Answer>>(res).data
+  return result
 }
 
 

@@ -1,21 +1,22 @@
 import { ListInfoModel, moyu, user } from '../../../../api'
 import { DawsilingContent } from './DawdilingContent'
-import { FULL_PERCENT } from '../../../../constants'
+import { FULL_PERCENT, NavUserPage } from '../../../../constants'
 import { router, SegmentButtonOptions } from '@kit.ArkUI'
 import { ItemRestriction, SegmentButton, SegmentButtonTextItem } from '@ohos.arkui.advanced.SegmentButton'
 import { ListAdapter, UserAuthentication } from '../../../../utils'
 import { CommentInput, NavDestinationHeader, PushAction, RefreshList } from '../../../../component'
+import { RouterParams } from '../../../../view_model'
 
 
 export interface DawdilingDetailData {
-  moment: moyu.MomentModel
+  moment: moyu.Moment
   content: string
 }
 
 @Component
 export struct DawdilingDetail {
   // 动态信息
-  @State @Watch("refresh") private moment: moyu.MomentModel | undefined = undefined
+  @State @Watch("refresh") private moment: moyu.Moment | undefined = undefined
   // 内容
   @State private content: string | undefined = undefined
   // 评论列表
@@ -48,8 +49,9 @@ export struct DawdilingDetail {
   @State private currentCommentName: string = ''
   // 当前评论提交事件
   @State private currentCommentAction: PushAction | undefined = undefined
+  @Consume navPathStack: NavPathStack
 
-  async refresh(){
+  async refresh() {
     // 评论
     const commentList = await moyu.commentList(this.moment?.id as string)
     this.comments = commentList.list
@@ -63,10 +65,10 @@ export struct DawdilingDetail {
     }
   }
 
-
   async loading() {
     if (this.hasNext) {
-      const commentList: ListInfoModel<moyu.MoyuComment> = await moyu.commentList(this.moment?.id as string, this.currentPage + 1)
+      const commentList: ListInfoModel<moyu.MoyuComment> =
+        await moyu.commentList(this.moment?.id as string, this.currentPage + 1)
       this.comments?.push(...commentList.list)
       this.hasNext = commentList.hasNext
       this.currentPage = commentList.currentPage
@@ -85,6 +87,12 @@ export struct DawdilingDetail {
               .borderRadius(100)
               .alt($r('app.media.image_error'))
               .autoResize(true)
+              .onClick(() => {
+                this.navPathStack.pushPath({
+                  name: NavUserPage,
+                  param: { uid: this.moment?.userId } as RouterParams
+                })
+              })
             Column({ space: 5 }) {
               Text(this.moment?.nickname).fontWeight(FontWeight.Bold)
                 .fontSize(12)
@@ -94,14 +102,25 @@ export struct DawdilingDetail {
                 .fontColor($r('app.color.second_text'))
             }
             .alignItems(HorizontalAlign.Start)
+            .onClick(() => {
+              this.navPathStack.pushPath({
+                name: NavUserPage,
+                param: { uid: this.moment?.userId } as RouterParams
+              })
+            })
 
             Blank()
             Text($r('app.string.follow'))
+              .onClick(() => {
+                // todo 关注
+              })
               .fontSize(10)
               .fontColor($r('app.color.selected_background_for_component'))
               .padding({
-                right: 10, left: 10,
-                top: 5, bottom: 5
+                right: 10,
+                left: 10,
+                top: 5,
+                bottom: 5
               })
               .borderRadius(100)
               .border({
@@ -111,6 +130,9 @@ export struct DawdilingDetail {
             Image($r('app.media.ic_public_more_filled'))
               .width(20)
               .height(20)
+              .onClick(() => {
+                // todo 菜单
+              })
           }
         }
 
@@ -124,7 +146,8 @@ export struct DawdilingDetail {
               if (this.comments) {
                 Column({ space: 10 }) {
                   Row() {
-                    Text(`共 ${this.tabSelectedIndexes[0] === 0 ? this.total : this.moment?.thumbUpCount} 条${this.tabSelectedIndexes[0] === 0 ? "评论" : "点赞"}`)
+                    Text(`共 ${this.tabSelectedIndexes[0] === 0 ? this.total :
+                      this.moment?.thumbUpCount} 条${this.tabSelectedIndexes[0] === 0 ? "评论" : "点赞"}`)
                       .fontSize(12)
                       .fontWeight(FontWeight.Bold)
                     Blank()
@@ -153,8 +176,7 @@ export struct DawdilingDetail {
                         }
                       })
                     }
-                  }
-                  else if (this.tabSelectedIndexes[0] === 1) {
+                  } else if (this.tabSelectedIndexes[0] === 1) {
                     if (this.thumbUpAdapter) {
                       RefreshList({
                         listAdapter: $thumbUpAdapter,
@@ -192,7 +214,12 @@ export struct DawdilingDetail {
             .fontColor($r('app.color.second_text'))
             .fontSize(14)
             .borderRadius(100)
-            .padding({ left: 15, right: 15, top: 10, bottom: 10 })
+            .padding({
+              left: 15,
+              right: 15,
+              top: 10,
+              bottom: 10
+            })
             .layoutWeight(1)
             .backgroundColor($r('app.color.list_back'))
             .onClick(async () => {
@@ -216,7 +243,8 @@ export struct DawdilingDetail {
               }
             })
 
-          Image(this.moment?.hasThumbUp ? $r('app.media.ic_public_thumbsup_filled') : $r('app.media.ic_public_thumbsup'))
+          Image(this.moment?.hasThumbUp ? $r('app.media.ic_public_thumbsup_filled') :
+          $r('app.media.ic_public_thumbsup'))
             .height(20)
             .width(20)
             .onClick(async () => {
@@ -263,7 +291,7 @@ export struct DawdilingDetail {
   }
 
   @Builder
-  commentItem(item: moyu.MoyuComment, index: number) {
+  commentItem(item: moyu.MoyuComment, _index: number) {
     Row({ space: 10 }) {
       Image(item.avatar)
         .width(30)
@@ -272,10 +300,22 @@ export struct DawdilingDetail {
         .autoResize(true)
         .autoResize(true)
         .alt($r('app.media.image_error'))
+        .onClick(() => {
+          this.navPathStack.pushPath({
+            name: NavUserPage,
+            param: { uid: item.userId } as RouterParams
+          })
+        })
       Column({ space: 5 }) {
         Text(item.nickname)
           .fontSize(14)
           .fontColor($r('app.color.selected_background_for_component'))
+          .onClick(() => {
+            this.navPathStack.pushPath({
+              name: NavUserPage,
+              param: { uid: item.userId } as RouterParams
+            })
+          })
         Text(item.content).fontSize(13)
         Text(item.createTime)
           .fontSize(10)
@@ -293,8 +333,7 @@ export struct DawdilingDetail {
           .alignItems(HorizontalAlign.Start)
           .backgroundColor($r('app.color.list_back'))
           .borderRadius(3)
-        }
-        else {
+        } else {
           Blank()
         }
       }
@@ -320,8 +359,7 @@ export struct DawdilingDetail {
           }
         } as PushAction
         this.isShowCommentInput = true
-      }
-      else {
+      } else {
         router.pushUrl({
           url: 'pages/Login/Login'
         })
@@ -334,8 +372,20 @@ export struct DawdilingDetail {
 
     Text() {
       Span(subItem.nickname).fontColor($r('app.color.selected_background_for_component'))
+        .onClick(() => {
+          this.navPathStack.pushPath({
+            name: NavUserPage,
+            param: { uid: subItem.userId } as RouterParams
+          })
+        })
       Span(" 回复 ")
       Span(subItem.targetUserNickname).fontColor($r('app.color.selected_background_for_component'))
+        .onClick(() => {
+          this.navPathStack.pushPath({
+            name: NavUserPage,
+            param: { uid: subItem.targetUserId } as RouterParams
+          })
+        })
       Span(": ")
       Span(subItem.content)
     }
@@ -358,8 +408,7 @@ export struct DawdilingDetail {
           }
         } as PushAction
         this.isShowCommentInput = true
-      }
-      else {
+      } else {
         router.pushUrl({
           url: 'pages/Login/Login'
         })
@@ -379,6 +428,8 @@ struct ThumbUpItem {
   @Require @Prop item: string
   @Require @Prop index: number
   @State private userInfo: user.UserInfo | undefined = undefined
+
+  @Consume navPathStack: NavPathStack
 
   async aboutToAppear(): Promise<void> {
     this.userInfo = await user.user_info(this.item)
@@ -406,6 +457,12 @@ struct ThumbUpItem {
       }
       .justifyContent(FlexAlign.Start)
       .width(FULL_PERCENT)
+      .onClick(() => {
+        this.navPathStack.pushPath({
+          name: NavUserPage,
+          param: { uid: this.userInfo?.userId } as RouterParams
+        })
+      })
     }
   }
 }

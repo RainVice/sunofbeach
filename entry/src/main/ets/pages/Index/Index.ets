@@ -1,5 +1,6 @@
 import { NavDawdiling, NavDawdilingTopicCategorize, FULL_PERCENT, NavArticle, NavQuestion,
-  NavFollow } from '../../constants'
+  NavFollow,
+  NavUserPage} from '../../constants'
 import { IndexItem, indexItems } from '../../view_model'
 import { Article } from './Article/Article'
 import { Header } from './component/Header'
@@ -11,6 +12,7 @@ import { User } from './User/User'
 import { ArticleDetail } from './Article/Content/ArticleDetail'
 import { QuestionDetail } from './Question/Content/QuestionDetail'
 import { FollowList } from './User/Content/FollowList'
+import { UserPage } from './User/UserPage'
 
 @Entry
 @Component
@@ -120,6 +122,8 @@ struct Index {
       QuestionDetail()
     }else if(name === NavFollow){
       FollowList()
+    }else if (name === NavUserPage){
+      UserPage()
     }
   }
 

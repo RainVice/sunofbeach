@@ -4,7 +4,7 @@ import { FULL_PERCENT } from '../../../../constants'
 
 @Component
 export struct DawsilingContent {
-  @Prop moyuContent: moyu.MomentModel
+  @Prop moyuContent: moyu.Moment
   @Prop content: string
   @Prop maxLine: number = -1
   build() {

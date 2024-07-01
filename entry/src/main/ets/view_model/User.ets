@@ -1,0 +1,1 @@
+export const contentCategorized : string[]= ["动态","文章","回答"]

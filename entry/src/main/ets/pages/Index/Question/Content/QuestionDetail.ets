@@ -1,9 +1,10 @@
 import { wenda } from '../../../../api'
 import { NavDestinationHeader } from '../../../../component/NavDestinationHeader'
-import { FULL_PERCENT } from '../../../../constants'
+import { FULL_PERCENT, NavUserPage } from '../../../../constants'
 import { RefreshList } from '../../../../component/RefreshList';
 import { ListAdapter } from '../../../../utils';
 import { RichHtml } from '../../../../component';
+import { RouterParams } from '../../../../view_model';
 
 
 @Component
@@ -15,6 +16,7 @@ export struct QuestionDetail {
   @State private listAdapter: ListAdapter<wenda.WendaComment> = new ListAdapter<wenda.WendaComment>()
   @State hasNext: boolean = true
   @State currentPage: number = 1;
+  @Consume navPathStack: NavPathStack
 
   async refresh() {
     this.wenDaDetail = await wenda.wenda_detail(this.content?.id)
@@ -22,8 +24,8 @@ export struct QuestionDetail {
     this.listAdapter.setData(this.comment_list)
   }
 
-  async load(){
-    const list = await wenda.comment_list(this.content?.id, this.currentPage+1)
+  async load() {
+    const list = await wenda.comment_list(this.content?.id, this.currentPage + 1)
     this.hasNext = list.length > 0
     if (list.length > 0) {
       this.currentPage++
@@ -62,6 +64,12 @@ export struct QuestionDetail {
                         .borderRadius(100)
                         .autoResize(true)
                         .alt($r('app.media.image_error'))
+                        .onClick(() => {
+                          this.navPathStack.pushPath({
+                            name: NavUserPage,
+                            param: { uid: this.content?.userId } as RouterParams
+                          })
+                        })
                       Column({ space: 2 }) {
                         Text(this.content?.nickname).fontWeight(FontWeight.Bold)
                           .fontColor(this.content?.isVip === "1" ? $r('app.color.vip') : $r('app.color.second_text'))
@@ -71,6 +79,12 @@ export struct QuestionDetail {
                           .fontColor($r('app.color.third_text'))
 
                       }
+                      .onClick(() => {
+                        this.navPathStack.pushPath({
+                          name: NavUserPage,
+                          param: { uid: this.content?.userId } as RouterParams
+                        })
+                      })
                       .height(30)
                       .alignItems(HorizontalAlign.Start)
                       .justifyContent(FlexAlign.Center)
@@ -91,7 +105,7 @@ export struct QuestionDetail {
 
                     // HPRichText({ richTextOption: $richTextOption })
                     //   .width(FULL_PERCENT)
-                    RichHtml({content: this.wenDaDetail.description})
+                    RichHtml({ content: this.wenDaDetail.description })
                   }
                   .width(FULL_PERCENT)
                   .padding(10)
@@ -126,7 +140,7 @@ export struct QuestionDetail {
             .layoutWeight(1)
             .scrollBar(BarState.Off)
           }
-          .onRefreshing(async ()=>{
+          .onRefreshing(async () => {
             await this.refresh()
             this.refreshing = false
           })
@@ -159,12 +173,22 @@ export struct QuestionDetail {
 struct CommentItem {
   @Prop comment: wenda.WendaComment
   @Prop index: number
-
+  @Consume navPathStack: NavPathStack
 
   build() {
     Column({ space: 10 }) {
       Row({ space: 10 }) {
-        Image(this.comment.avatar).height(30).width(30).autoResize(true).borderRadius(100)
+        Image(this.comment.avatar)
+          .height(30)
+          .width(30)
+          .autoResize(true)
+          .borderRadius(100)
+          .onClick(() => {
+            this.navPathStack.pushPath({
+              name: NavUserPage,
+              param: { uid: this.comment.uid } as RouterParams
+            })
+          })
         Column({ space: 2 }) {
           // 昵称
           Text(this.comment.nickname).fontWeight(FontWeight.Bold)
@@ -174,12 +198,18 @@ struct CommentItem {
           Text(this.comment.publishTime).fontSize(13).fontColor($r('app.color.second_text'))
 
         }.alignItems(HorizontalAlign.Start)
+        .onClick(() => {
+          this.navPathStack.pushPath({
+            name: NavUserPage,
+            param: { uid: this.comment.uid } as RouterParams
+          })
+        })
       }.width(FULL_PERCENT)
       .justifyContent(FlexAlign.Start)
 
       // HPRichText({ richTextOption: $richTextOption })
-      RichHtml({content: this.comment.content})
-      Column({space: 2}) {
+      RichHtml({ content: this.comment.content })
+      Column({ space: 2 }) {
         ForEach(this.comment.wendaSubComments, (item: wenda.WendaSubComment) => {
           this.subComment(item)
         })

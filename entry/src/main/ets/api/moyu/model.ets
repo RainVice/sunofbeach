@@ -43,29 +43,7 @@ export interface Moment {
   thumbUpList: string[];
   vip: boolean;
 }
-@Observed
-export class MomentModel implements Moment{
-  id: string = '';
-  userId: string = '';
-  nickname: string = '';
-  avatar: string = '';
-  company?: string | undefined;
-  position?: string | undefined;
-  content: string = '';
-  linkCover?: string | undefined;
-  linkTitle?: string | undefined;
-  linkUrl?: string | undefined;
-  commentCount: number = 0;
-  thumbUpCount: number = 0;
-  images: string[] = [];
-  topicName?: string | undefined;
-  topicId?: string | undefined;
-  createTime: string = '';
-  hasThumbUp: boolean = false;
-  thumbUpList: string[] = [];
-  vip: boolean = false;
 
-}
 
 /**
  * 摸鱼评论内容

@@ -1,11 +1,13 @@
-import { IndexHeader } from '../../../view_model'
+import { IndexHeader, RouterParams } from '../../../view_model'
 import { promptAction } from '@kit.ArkUI'
 import { user } from '../../../api'
+import { NavUserPage } from '../../../constants'
 
 @Component
 export struct Header {
   @StorageProp("userInfo") userInfo: user.UserInfo | null = null
   @Prop menuItem: IndexHeader[] = []
+  @Consume navPathStack: NavPathStack
 
   build() {
 
@@ -14,6 +16,14 @@ export struct Header {
         .alt($r('app.media.fingerprint'))
         .width(30)
         .height(30)
+        .onClick(() => {
+          if (this.userInfo) {
+            this.navPathStack.pushPath({
+              name: NavUserPage,
+              param: { uid: this.userInfo.userId } as RouterParams
+            })
+          }
+        })
         // .backgroundColor(Color.Black)
       Search({
         placeholder: $r('app.string.enter_search_content')

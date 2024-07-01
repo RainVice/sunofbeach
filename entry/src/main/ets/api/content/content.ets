@@ -3,8 +3,8 @@
  */
 import { Send } from '../send'
 import { http } from '@kit.NetworkKit'
-import { ArticleDetail, Category, Comment, CommentParam, CtContent, CtContentModel, SubCommentParam } from './model'
-import { ListInfoModel, SobData } from '..'
+import { ArticleDetail, Category, Comment, CommentParam, CtContent, SubCommentParam } from './model'
+import { ListInfo, ListInfoModel, SobData } from '..'
 import { resToObj } from '../util'
 
 /**
@@ -20,9 +20,10 @@ export const category = async (): Promise<Category[]> => {
  * 获取文章内容
  * @param page 页码，从1开始
  */
-export const content = async (categoryId: string = '', page: number = 1): Promise<ListInfoModel<CtContentModel>> => {
-  const res: http.HttpResponse = await Send.get(`/ct/content/home/recommend${categoryId ? `/${categoryId}` : ''}/${page}`)
-  let recommend: ListInfoModel<CtContentModel> = resToObj<SobData<ListInfoModel<CtContentModel>>>(res).data
+export const content = async (categoryId: string = '', page: number = 1): Promise<ListInfoModel<CtContent>> => {
+  const res: http.HttpResponse =
+    await Send.get(`/ct/content/home/recommend${categoryId ? `/${categoryId}` : ''}/${page}`)
+  let recommend: ListInfoModel<CtContent> = resToObj<SobData<ListInfoModel<CtContent>>>(res).data
   return recommend
 }
 
@@ -73,16 +74,25 @@ export const comment = async (articleId: string, commentContent: string): Promis
  * beNickname，被评论用户的昵称
  * content,评论内容
  */
-export const sub_comment = async (articleId: string, parentId: string, beUid: string, beNickname: string, content: string): Promise<boolean> => {
-  const res: http.HttpResponse = await Send.post('/ct/article/sub-comment', {
-    articleId,
-    parentId,
-    beUid,
-    beNickname,
-    content
-  } as SubCommentParam)
-  let result: SobData<null> = resToObj<SobData<null>>(res)
-  return result.success
+export const sub_comment =
+  async (articleId: string, parentId: string, beUid: string, beNickname: string, content: string): Promise<boolean> => {
+    const res: http.HttpResponse = await Send.post('/ct/article/sub-comment', {
+      articleId,
+      parentId,
+      beUid,
+      beNickname,
+      content
+    } as SubCommentParam)
+    let result: SobData<null> = resToObj<SobData<null>>(res)
+    return result.success
+  }
+
+/**
+ * 获取指定用户发布的文章
+ * https://api.sunofbeach.net/ct/article/list/1153952789488054272/1
+ */
+export const article4user = async (uid: string = "", page: number): Promise<ListInfo<CtContent>> => {
+  const res: http.HttpResponse = await Send.get(`https://api.sunofbeach.net/ct/article/list/${uid}/${page}`)
+  const result: ListInfo<CtContent> = resToObj<SobData<ListInfo<CtContent>>>(res).data
+  return result
 }
-
-

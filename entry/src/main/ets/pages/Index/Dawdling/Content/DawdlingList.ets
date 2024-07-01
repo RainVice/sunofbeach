@@ -7,8 +7,8 @@ import { DawdlingCard } from './DawdilingCard'
 export struct DawdlingList {
   @Prop topicInfo: moyu.TopicIndex
   // @State hasNext: boolean = true
-  @State adapter: ListAdapter<moyu.MomentModel> = new ListAdapter<moyu.MomentModel>([])
-  @State moyuData: ListInfoModel<moyu.MomentModel> | null = null
+  @State adapter: ListAdapter<moyu.Moment> = new ListAdapter<moyu.Moment>([])
+  @State moyuData: ListInfoModel<moyu.Moment> | null = null
 
   async aboutToAppear() {
     await this.refresh()
@@ -23,7 +23,7 @@ export struct DawdlingList {
 
   async loading() {
     if (this.moyuData?.hasNext) {
-      const tempData: ListInfoModel<moyu.MomentModel> = await moyu.momentForTopicId(this.topicInfo.id, this.moyuData.currentPage + 1)
+      const tempData: ListInfoModel<moyu.Moment> = await moyu.momentForTopicId(this.topicInfo.id, this.moyuData.currentPage + 1)
       this.moyuData.list.push(...tempData.list)
       this.moyuData.hasNext = tempData.hasNext
       this.moyuData.currentPage = tempData.currentPage
@@ -54,7 +54,7 @@ export struct DawdlingList {
   }
 
   @Builder
-  listItem(item: object | string | number | boolean, index: number) {
-    DawdlingCard({ moment: item as moyu.MomentModel })
+  listItem(item: object | string | number | boolean, _index: number) {
+    DawdlingCard({ moment: item as moyu.Moment })
   }
 }

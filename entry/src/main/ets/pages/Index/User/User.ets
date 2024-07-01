@@ -1,5 +1,5 @@
 import { user } from '../../../api'
-import { NavFollow, FULL_PERCENT } from '../../../constants'
+import { NavFollow, FULL_PERCENT, NavUserPage } from '../../../constants'
 import { router } from '@kit.ArkUI'
 import { RouterParams } from '../../../view_model'
 
@@ -35,7 +35,12 @@ export struct User {
               if (this.userInfo?.vip) {
                 Text("vip")
                   .fontColor(Color.White)
-                  .padding({ left: 5, right: 5, top: 2, bottom: 2 })
+                  .padding({
+                    left: 5,
+                    right: 5,
+                    top: 2,
+                    bottom: 2
+                  })
                   .backgroundColor($r('app.color.vip'))
                   .fontWeight(FontWeight.Bold)
                   .borderRadius(5)
@@ -67,13 +72,16 @@ export struct User {
             router.pushUrl({
               url: 'pages/Login/Login'
             })
-          }
-          else {
+          } else {
             if (this.userInfo) {
-              router.pushUrl({
-                url: 'pages/User/UserPage',
-                params: {uid: this.userInfo.userId} as RouterParams
+              this.navPathStack.pushPath({
+                name: NavUserPage,
+                param: { uid: this.userInfo.userId } as RouterParams
               })
+              // router.pushUrl({
+              //   url: 'pages/User/UserPage',
+              //   params: {uid: this.userInfo.userId} as RouterParams
+              // })
             }
           }
         })

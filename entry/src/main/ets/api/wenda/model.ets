@@ -78,3 +78,41 @@ export interface WendaSubComment {
 }
 
 
+/**
+ * 回答信息
+ */
+export interface Answer {
+  content: Content[]
+  pageable: Pageable
+  totalPages: number
+  totalElements: number
+  last: boolean
+  number: number
+  size: number
+  numberOfElements: number
+  sort: Sort
+  first: boolean
+}
+
+export interface Content {
+  wendaTitle: string
+  wendaComment: WendaComment
+}
+
+
+
+export interface Pageable {
+  sort: Sort
+  pageSize: number
+  pageNumber: number
+  offset: number
+  paged: boolean
+  unpaged: boolean
+}
+
+export interface Sort {
+  sorted: boolean
+  unsorted: boolean
+}
+
+

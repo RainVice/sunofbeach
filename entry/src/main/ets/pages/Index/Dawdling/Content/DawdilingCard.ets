@@ -1,12 +1,13 @@
 import { moyu } from '../../../../api'
-import { NavDawdiling, FULL_PERCENT } from '../../../../constants'
+import { NavDawdiling, FULL_PERCENT, NavUserPage } from '../../../../constants'
 import { createDocumentStream, Document, DomUtils, parseDocument, Parser } from '@ohos/htmlparser2'
 import { DawsilingContent } from './DawdilingContent'
 import { DawdilingDetailData } from './DawdilingDetail'
+import { RouterParams } from '../../../../view_model'
 
 @Component
 export struct DawdlingCard {
-  @Require @Prop moment: moyu.MomentModel
+  @Require @Prop moment: moyu.Moment
   @State content: string = ''
   @Consume navPathStack: NavPathStack
 
@@ -25,10 +26,22 @@ export struct DawdlingCard {
             .borderRadius(100)
             .autoResize(true)
             .alt($r('app.media.image_error'))
+            .onClick(() => {
+              this.navPathStack.pushPath({
+                name: NavUserPage,
+                param: { uid: this.moment.userId } as RouterParams
+              })
+            })
           Column({ space: 2 }) {
             Text(this.moment?.nickname).fontWeight(FontWeight.Bold)
               .fontColor(this.moment?.vip ? $r('app.color.vip') : $r('app.color.second_text'))
               .fontSize(14)
+              .onClick(() => {
+                this.navPathStack.pushPath({
+                  name: NavUserPage,
+                  param: { uid: this.moment.userId } as RouterParams
+                })
+              })
             Row({ space: 8 }) {
               Text(this.moment?.position ? this.moment?.position : $r('app.string.vagrant'))
                 .fontSize(10)

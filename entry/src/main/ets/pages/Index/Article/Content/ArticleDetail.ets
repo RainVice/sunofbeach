@@ -1,8 +1,9 @@
 import { content } from '../../../../api'
 import { CommentInput, NavDestinationHeader, PushAction, RefreshList, RichHtml, } from '../../../../component'
-import { FULL_PERCENT } from '../../../../constants'
+import { FULL_PERCENT, NavUserPage } from '../../../../constants'
 import { ListAdapter, UserAuthentication } from '../../../../utils'
 import { router } from '@kit.ArkUI'
+import { RouterParams } from '../../../../view_model'
 
 @Component
 export struct ArticleDetail {
@@ -18,6 +19,7 @@ export struct ArticleDetail {
   // 当前评论提交事件
   @State private currentCommentAction: PushAction | undefined = undefined
   scroll: Scroller = new Scroller()
+  @Consume navPathStack: NavPathStack
 
   // @State richTextOption: RichTextOption = { content: '' }
 
@@ -55,6 +57,12 @@ export struct ArticleDetail {
                 .borderRadius(100)
                 .alt($r('app.media.image_error'))
                 .autoResize(true)
+                .onClick(() => {
+                  this.navPathStack.pushPath({
+                    name: NavUserPage,
+                    param: { uid: this.ctContent?.userId } as RouterParams
+                  })
+                })
               Column({ space: 5 }) {
                 Text(this.ctContent?.nickName).fontWeight(FontWeight.Bold)
                   .fontSize(12)
@@ -64,14 +72,22 @@ export struct ArticleDetail {
                   .fontColor($r('app.color.second_text'))
               }
               .alignItems(HorizontalAlign.Start)
+              .onClick(() => {
+                this.navPathStack.pushPath({
+                  name: NavUserPage,
+                  param: { uid: this.ctContent?.userId } as RouterParams
+                })
+              })
 
               Blank()
               Text($r('app.string.follow'))
                 .fontSize(10)
                 .fontColor($r('app.color.selected_background_for_component'))
                 .padding({
-                  right: 10, left: 10,
-                  top: 5, bottom: 5
+                  right: 10,
+                  left: 10,
+                  top: 5,
+                  bottom: 5
                 })
                 .borderRadius(100)
                 .border({
@@ -99,7 +115,7 @@ export struct ArticleDetail {
 
               if (this.articleDetail) {
                 // MdPreview({ refreshing: $refreshing, content: this.articleDetail.content })
-                RichHtml({content: this.articleDetail.content })
+                RichHtml({ content: this.articleDetail.content })
                 // HPRichText({richTextOption: this.richTextOption})
               }
 
@@ -166,7 +182,12 @@ export struct ArticleDetail {
               .fontColor($r('app.color.second_text'))
               .fontSize(14)
               .borderRadius(100)
-              .padding({ left: 15, right: 15, top: 10, bottom: 10 })
+              .padding({
+                left: 15,
+                right: 15,
+                top: 10,
+                bottom: 10
+              })
               .layoutWeight(1)
               .backgroundColor($r('app.color.list_back'))
               .onClick(async () => {
@@ -181,8 +202,7 @@ export struct ArticleDetail {
                     }
                   } as PushAction
                   this.isShowCommentInput = true
-                }
-                else {
+                } else {
                   router.pushUrl({
                     url: 'pages/Login/Login'
                   })
@@ -226,10 +246,22 @@ export struct ArticleDetail {
         .autoResize(true)
         .autoResize(true)
         .alt($r('app.media.image_error'))
+        .onClick(() => {
+          this.navPathStack.pushPath({
+            name: NavUserPage,
+            param: { uid: item.userId } as RouterParams
+          })
+        })
       Column({ space: 5 }) {
         Text(item.nickname)
           .fontSize(14)
           .fontColor($r('app.color.selected_background_for_component'))
+          .onClick(() => {
+            this.navPathStack.pushPath({
+              name: NavUserPage,
+              param: { uid: item.userId } as RouterParams
+            })
+          })
         Text(item.commentContent).fontSize(13)
         Text(item.publishTime)
           .fontSize(10)
@@ -247,8 +279,7 @@ export struct ArticleDetail {
           .alignItems(HorizontalAlign.Start)
           .backgroundColor($r('app.color.list_back'))
           .borderRadius(3)
-        }
-        else {
+        } else {
           Blank()
         }
       }
@@ -273,8 +304,7 @@ export struct ArticleDetail {
           }
         } as PushAction
         this.isShowCommentInput = true
-      }
-      else {
+      } else {
         router.pushUrl({
           url: 'pages/Login/Login'
         })
@@ -288,8 +318,20 @@ export struct ArticleDetail {
 
     Text() {
       Span(subItem.yourNickname).fontColor($r('app.color.selected_background_for_component'))
+        .onClick(() => {
+          this.navPathStack.pushPath({
+            name: NavUserPage,
+            param: { uid: subItem.yourUid } as RouterParams
+          })
+        })
       Span(" 回复 ")
       Span(subItem.beNickname).fontColor($r('app.color.selected_background_for_component'))
+        .onClick(() => {
+          this.navPathStack.pushPath({
+            name: NavUserPage,
+            param: { uid: subItem.beUid } as RouterParams
+          })
+        })
       Span(": ")
       Span(subItem.content)
     }
@@ -311,8 +353,7 @@ export struct ArticleDetail {
           }
         } as PushAction
         this.isShowCommentInput = true
-      }
-      else {
+      } else {
         router.pushUrl({
           url: 'pages/Login/Login'
         })

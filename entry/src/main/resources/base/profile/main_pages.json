@@ -2,7 +2,6 @@
   "src": [
     "pages/Index/Index",
     "pages/ImagePreview/ImagePreview",
-    "pages/Login/Login",
-    "pages/User/UserPage"
+    "pages/Login/Login"
   ]
 }

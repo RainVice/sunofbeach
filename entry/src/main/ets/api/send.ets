@@ -54,6 +54,7 @@ export class Send {
           url: 'pages/Login/Login'
         })
       }
+      console.log(JSON.stringify(temp))
       throw new Error(JSON.stringify(temp))
     }
   }

@@ -7,8 +7,8 @@ import { ArticleCard } from './ArticleCard'
 export struct ArticleList {
 
   @Require @Prop categoryInfo: content.Category
-  @State contentInfo : ListInfoModel<content.CtContentModel> | null = null
-  @State adapter: ListAdapter<content.CtContentModel>  = new ListAdapter()
+  @State contentInfo : ListInfoModel<content.CtContent> | null = null
+  @State adapter: ListAdapter<content.CtContent>  = new ListAdapter()
 
   async aboutToAppear(): Promise<void> {
     await this.refresh()

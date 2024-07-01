@@ -1,5 +1,6 @@
 import { wenda } from '../../../../api'
-import { FULL_PERCENT, NavQuestion } from '../../../../constants'
+import { FULL_PERCENT, NavQuestion, NavUserPage } from '../../../../constants'
+import { RouterParams } from '../../../../view_model'
 
 @Component
 export struct QuestionCard {
@@ -17,6 +18,12 @@ export struct QuestionCard {
             .borderRadius(100)
             .autoResize(true)
             .alt($r('app.media.image_error'))
+            .onClick(() => {
+              this.navPathStack.pushPath({
+                name: NavUserPage,
+                param: { uid: this.content.userId } as RouterParams
+              })
+            })
           Column({ space: 2 }) {
             Text(this.content?.nickname).fontWeight(FontWeight.Bold)
               .fontColor(this.content?.isVip === "1" ? $r('app.color.vip') : $r('app.color.second_text'))
@@ -24,8 +31,13 @@ export struct QuestionCard {
             Text(this.content?.createTime)
               .fontSize(10)
               .fontColor($r('app.color.third_text'))
-
           }
+          .onClick(() => {
+            this.navPathStack.pushPath({
+              name: NavUserPage,
+              param: { uid: this.content.userId } as RouterParams
+            })
+          })
           .height(30)
           .alignItems(HorizontalAlign.Start)
           .justifyContent(FlexAlign.Center)

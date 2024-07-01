@@ -1,7 +1,6 @@
 import { Send } from '../send'
 import { http } from '@kit.NetworkKit'
-import { CommentParam, Datum, MoyuComment, MomentModel, SubCommentParam, TopicIndex, topicIndexs,
-  Moment } from './model'
+import { CommentParam, Datum, MoyuComment, Moment, SubCommentParam, TopicIndex, topicIndexs, } from './model'
 import { ListInfoModel, SobData } from '..'
 import { resToObj } from '../util'
 import { promptAction } from '@kit.ArkUI'
@@ -23,9 +22,9 @@ export const topic = async (): Promise<TopicIndex[]> => {
  * topicId 话题Id，其中推荐为recommend，获取关注的为 follow 其他的则是话题的id
  * page 为页码，从1开始
  */
-export const momentForTopicId = async (topicId: string, page: number): Promise<ListInfoModel<MomentModel>> => {
+export const momentForTopicId = async (topicId: string, page: number): Promise<ListInfoModel<Moment>> => {
   const res: http.HttpResponse = await Send.get(`/ct/moyu/list/${topicId}/${page}`)
-  const moyu: ListInfoModel<MomentModel> = resToObj<SobData<ListInfoModel<MomentModel>>>(res).data
+  const moyu: ListInfoModel<Moment> = resToObj<SobData<ListInfoModel<Moment>>>(res).data
   return moyu
 }
 
@@ -125,18 +124,18 @@ export const thumb_up = async (momentId: string): Promise<boolean> => {
 /**
  * 获取单条动态
  */
-export const oneMoment = async (momentId: string): Promise<MomentModel> => {
+export const oneMoment = async (momentId: string): Promise<Moment> => {
   const res: http.HttpResponse = await Send.get(`/ct/moyu/${momentId}`)
-  const result : MomentModel = resToObj<SobData<MomentModel>>(res).data
+  const result : Moment = resToObj<SobData<Moment>>(res).data
   return result
 }
 
 
 /**
- * 获取摸鱼列表
- * https://api.sunofbeach.net/ct/moyu/list/user/1153952789488054272/1
+ * 获取指定用户摸鱼列表
+ * https://api.sunofbeach.net/ct/moyu/list/user/1153952789488054272/2
  */
-export const moyuList_user = async (uid: string = "",page: number): Promise<Moment[]> => {
+export const moyuList4user = async (uid: string = "",page: number): Promise<Moment[]> => {
   const res: http.HttpResponse = await Send.get(`https://api.sunofbeach.net/ct/moyu/list/user/${uid}/${page}`)
   const result: Moment[] = resToObj<SobData<Moment[]>>(res).data
   return result

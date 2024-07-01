@@ -30,23 +30,12 @@ export interface CtContent {
   id: string;
   userId: string;
   isVip?: boolean;
-  vip?: boolean
+  vip?: boolean;
+  labels: string[];
+  state: string | null;
+  articleType: string | null
 }
-@Observed
-export class CtContentModel implements CtContent{
-  covers: string[] = [];
-  title: string = '';
-  createTime: string = '';
-  thumbUp: number = 0;
-  viewCount: number = 0;
-  type: number = 0;
-  nickName: string = '';
-  avatar: string = '';
-  id: string = '';
-  userId: string = '';
-  isVip?: boolean | undefined;
-  vip?: boolean | undefined;
-}
+
 
 /**
  * 文章详情
